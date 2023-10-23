@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+	crossorigin="anonymous">
+<title>Show all hours in month</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+	<div class="bg-primary bg-primary text-dark bg-opacity-25 mb-4 py-4">
+		<div class="container">
+			<div class="row">
+				<header class="col-md-12">
+					<div style="text-align: center; font-size: 70px; font-weight: bold">DLUT</div>
+					<div class="container-fluid text-center"></div>
+				</header>
+			</div>
+		</div>
+	</div>
+	<nav
+		class="navbar navbar-expand-lg navbar-light bg-primary text-dark bg-opacity-25">
+
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/dlut">Sākums</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/ievadit/darba-stundas">Ievadīt darba
+							stundas mēnesim</a></li>
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/eksportet/finansejuma-avots/izvele">Tabeļu
+							eksportēšana finansējuma avotam</a></li>
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/eksportet/darbinieks/izvele">Tabeļu
+							eksportēšana darbiniekam</a></li>
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/eksportet/darbinieks-finansejuma-avots/izvele">Tabeļu
+							eksportēšana darbiniekam un finansējuma avotam</a></li>
+					<li class="nav-item"><a class="nav-link disabled">Izrakstīties</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+	<h1 class="text-center">Darba stundas</h1>
+
+	<div class="container">
+		<div class="row">
+			<div class="col"></div>
+			<div class="col">
+
+				<table class="table table-bordered border-dark">
+					<thead>
+						<tr>
+							<th scope="col">N.p.k.</th>
+							<th scope="col">Gads</th>
+							<th scope="col">Mēnesis</th>
+							<th scope="col">Darba stundas mēnesī</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="temp: ${workHours}">
+							<th scope="row" th:text="${tempStat.count}"></th>
+							<td th:text="${temp.getYear()}"></td>
+							<td th:switch="${temp.getMonth()}">
+							<span th:case="'1'" th:text="Janvāris"></span>
+							<span th:case="'2'" th:text="Februāris"></span>
+							<span th:case="'3'" th:text="Marts"></span>
+							<span th:case="'4'" th:text="Aprīlis"></span>
+							<span th:case="'5'" th:text="Maijs"></span>
+							<span th:case="'6'" th:text="Jūnijs"></span>
+							<span th:case="'7'" th:text="Jūlijs"></span>
+							<span th:case="'8'" th:text="Augusts"></span>
+							<span th:case="'9'" th:text="Septembris"></span>
+							<span th:case="'10'" th:text="Oktobris"></span>
+							<span th:case="'11'" th:text="Novembris"></span>
+							<span th:case="'12'" th:text="Decembris"></span>
+							</td>
+							<td th:text="${temp.getHoursInMonth()}"></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+			<div class="col"></div>
+		</div>
+	</div>
+
+	<div class="wrapper flex-grow-1"></div>
+	<div class="bg-primary text-dark bg-opacity-25 py-4 mt-4">
+		<div class="container">
+			<div class="row">
+				<footer class="mt-auto col-md-12">
+					<div style="text-align: center">VSRC 2021</div>
+				</footer>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

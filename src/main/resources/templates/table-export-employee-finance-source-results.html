@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<style type="text/css">
+.vertical {
+	writing-mode: sideways-lr;
+}
+</style>
+<meta charset="ISO-8859-1">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+	crossorigin="anonymous">
+<title>Table export results for employee and finance source</title>
+<body class="d-flex flex-column min-vh-100">
+
+	<div class="bg-primary bg-primary text-dark bg-opacity-25 mb-4 py-4">
+		<div class="container">
+			<div class="row">
+				<header class="col-md-12">
+					<div style="text-align: center; font-size: 70px; font-weight: bold">DLUT</div>
+					<div class="container-fluid text-center"></div>
+				</header>
+			</div>
+		</div>
+	</div>
+	<nav
+		class="navbar navbar-expand-lg navbar-light bg-primary text-dark bg-opacity-25">
+
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/dlut">Sākums</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/ievadit/darba-stundas">Ievadīt darba
+							stundas mēnesim</a></li>
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/eksportet/finansejuma-avots/izvele">Tabeļu
+							eksportēšana finansējuma avotam</a></li>
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/eksportet/darbinieks/izvele">Tabeļu
+							eksportēšana darbiniekam</a></li>
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/eksportet/darbinieks-finansejuma-avots/izvele">Tabeļu
+							eksportēšana darbiniekam un finansējuma avotam</a></li>
+					<li class="nav-item"><a class="nav-link disabled">Izrakstīties</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!--   <form action="#" th:action="@{/dlut/tabele/eksportet}" method="post"> -->
+
+	<h1>Skatīt darbinieka nostrādātās stundas vienā finansējuma avotā</h1>
+	<h2 th:text="${'Pārskata periods: ' + year + '. gada ' + month}">Par</h2>
+	<h2
+		th:text="${'Darbinieka vārds, uzvārds: ' + empl.getName() + ' ' + empl.getSurname()}">
+	</h2>
+	<h2 th:text="${'Finansējuma avots: ' + finSource.getTitle()}"></h2>
+
+
+	<div class="table-responsive">
+		<table class="table table-bordered border-dark">
+			<thead>
+				<tr>
+
+					<th rowspan="3">Finansējuma avota kods/numurs un nosaukums</th>
+					<th rowspan="3">Amats</th>
+					<th th:colspan="${emplData.getHoursInMonth().size()}"
+						scope="colgroup" class="text-center">Mēneša dienas</th>
+					<th rowspan="3">Stundas likme (EUR/h)</th>
+					<th colspan="2">Nostrādātās</th>
+					<th rowspan="3" class=vertical>Atvaļinājuma stundas</th>
+					<th rowspan="3">PLE</th>
+
+					<th scope="col"
+						th:style="${s} ?: 'display:none'"
+						class=vertical rowspan="3">Slimības lapa A</th>
+
+					<th scope="col"
+						th:style="${sb} ?: 'display:none'"
+						class=vertical rowspan="3">Slimības lapa B</th>
+
+					<th scope="col"
+						th:style="${ai} ?: 'display:none'"
+						class=vertical rowspan="3">Kārtējais atvaļinājums</th>
+
+					<th scope="col"
+						th:style="${ab} ?: 'display:none'"
+						class=vertical rowspan="3">Bezalgas atvaļinājums</th>
+
+					<th scope="col"
+						th:style="${aa} ?: 'display:none'"
+						class=vertical rowspan="3">Bērna kopšanas atvaļinājums</th>
+
+					<th scope="col"
+						th:style="${am} ?: 'display:none'"
+						class=vertical rowspan="3">Mācību atvaļnājums</th>
+
+					<th scope="col"
+						th:style="${ap} ?: 'display:none'"
+						class=vertical rowspan="3">Papildu atvaļnājums</th>
+
+					<th scope="col"
+						th:style="${ar} ?: 'display:none'"
+						class=vertical rowspan="3">Radošais atvaļnājums</th>
+
+					<th scope="col"
+						th:style="${bd} ?: 'display:none'"
+						class=vertical rowspan="3">Brīvprātīgais darbs</th>
+
+					<th scope="col"
+						th:style="${kd} ?: 'display:none'"
+						class=vertical rowspan="3">Darba komandējums</th>
+
+					<th scope="col"
+						th:style="${km} ?: 'display:none'"
+						class=vertical rowspan="3">Mācību komandējums</th>
+
+					<th scope="col"
+						th:style="${n} ?: 'display:none'"
+						class=vertical rowspan="3">Neattaisnots kavējums</th>
+				</tr>
+
+				<tr>
+					<th scope="col" class=vertical
+						th:each="dayTemp: ${emplData.getHoursInMonth()}"
+						th:switch="${dayTemp.value}">
+						<span th:case="'BR'" th:text="'Brīvdiena'"></span>
+						<span th:case="'SV'" th:text="'Svētki'"></span>
+						<span th:case="*" th:text="' '"></span></th>
+					<th rowspan="2" class=vertical>stundas</th>
+					<th rowspan="2" class=vertical>dienas</th>
+				</tr>
+
+				<tr>
+					<th scope="col" th:each="dayTemp: ${emplData.getHoursInMonth()}"
+						th:text="${dayTemp.key}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block>
+					<tr>
+						<td
+							th:text="${emplData.getFinanceSourceCode() + ', ' + emplData.getFinanceSourceTitle()}" />
+						<td th:text="${emplData.getPosition()}" />
+						<td th:each="dayTemp: ${emplData.getHoursInMonth()}"
+							th:text="${dayTemp.value}"></td>
+						<td th:text="${emplData.getPayPerHour()}"></td>
+						<td th:text="${emplData.sumHours()}"></td>
+						<td th:text="${emplData.daysWorkedAccordingToHours()}"></td>
+						<td th:text="${emplData.getVacationHours()}">
+						<td
+							th:text="${emplData.calculateFullTimeEquivalent(workHoursInMonth)}"></td>
+
+						<td th:style="${s} ?: 'display:none'"
+							th:text="${emplData.getSickDaysS()}"></td>
+
+						<td th:style="${sb} ?: 'display:none'"
+							th:text="${emplData.getSickDaysSb()}"></td>
+
+						<td
+							th:style="${ai} ?: 'display:none'"
+							th:text="${emplData.getVacationAnnualDays()}"></td>
+
+						<td th:style="${ab} ?: 'display:none'"
+							th:text="${emplData.getUnpaidVacation()}"></td>
+
+						<td th:style="${aa} ?: 'display:none'"
+							th:text="${emplData.getParentalLeave()}"></td>
+
+						<td
+							th:style="${am} ?: 'display:none'"
+							th:text="${emplData.getVacationEducation()}"></td>
+
+						<td th:style="${ap} ?: 'display:none'"
+							th:text="${emplData.getVacationExtra()}"></td>
+
+						<td th:style="${ar} ?: 'display:none'"
+							th:text="${emplData.getVacationCreative()}"></td>
+
+						<td th:style="${bd} ?: 'display:none'"
+							th:text="${emplData.getVoluntaryWork()}"></td>
+
+						<td th:style="${kd} ?: 'display:none'"
+							th:text="${emplData.getMissionWorkDays()}"></td>
+
+						<td
+							th:style="${km} ?: 'display:none'"
+							th:text="${emplData.getMissionEducationDays()}"></td>
+
+						<td
+							th:style="${n} ?: 'display:none'"
+							th:text="${emplData.getUnjustifiedAbsence()}"></td>
+					</tr>
+
+				</th:block>
+
+
+			</tbody>
+		</table>
+	</div>
+
+
+
+	<div class="wrapper flex-grow-1"></div>
+	<div class="bg-primary text-dark bg-opacity-25 py-4 mt-4">
+		<div class="container">
+			<div class="row">
+				<footer class="mt-auto col-md-12">
+					<div style="text-align: center">VSRC 2021</div>
+				</footer>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
+</body>
+</html>

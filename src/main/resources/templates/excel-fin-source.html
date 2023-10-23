@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<style type="text/css">
+.vertical {
+	writing-mode: sideways-lr;
+}
+</style>
+<meta charset="ISO-8859-1">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+	crossorigin="anonymous">
+<title>Excel file created</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+	<div class="bg-primary bg-primary text-dark bg-opacity-25 mb-4 py-4">
+		<div class="container">
+			<div class="row">
+				<header class="col-md-12">
+					<div style="text-align: center; font-size: 70px; font-weight: bold">DLUT</div>
+					<div class="container-fluid text-center"></div>
+				</header>
+			</div>
+		</div>
+	</div>
+	<nav
+		class="navbar navbar-expand-lg navbar-light bg-primary text-dark bg-opacity-25">
+
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/dlut">Sākums</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/ievadit/darba-stundas">Ievadīt darba
+							stundas mēnesim</a></li>
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/eksportet/finansejuma-avots/izvele">Tabeļu
+							eksportēšana finansējuma avotam</a></li>
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/eksportet/darbinieks/izvele">Tabeļu
+							eksportēšana darbiniekam</a></li>
+					<li class="nav-item"><a class="nav-link active"
+						href="/dlut/tabele/eksportet/darbinieks-finansejuma-avots/izvele">Tabeļu
+							eksportēšana darbiniekam un finansējuma avotam</a></li>
+					<li class="nav-item"><a class="nav-link disabled">Izrakstīties</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<h1 class="text-center">Excel datne izveidota!</h1>
+
+	<div class="wrapper flex-grow-1"></div>
+	<div class="bg-primary text-dark bg-opacity-25 py-4 mt-4">
+		<div class="container">
+			<div class="row">
+				<footer class="mt-auto col-md-12">
+					<div style="text-align: center">VSRC 2021</div>
+				</footer>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
