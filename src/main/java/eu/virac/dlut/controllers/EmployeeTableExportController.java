@@ -4,19 +4,18 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import eu.virac.dlut.models.helpers.EmployeeDTO;
+import eu.virac.dlut.models.helpers.YearMonthEmployeeSelectionDTO;
 import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import eu.virac.dlut.models.Employee;
 import eu.virac.dlut.models.EmployeeTimeSheet;
@@ -34,7 +33,7 @@ import eu.virac.dlut.services.IFullTimeEquivalentService;
 import eu.virac.dlut.services.IHoursInMonthService;
 import eu.virac.dlut.services.ITableExportService;
 
-@Controller
+@RestController
 public class EmployeeTableExportController {
 
 	@Autowired
@@ -59,15 +58,18 @@ public class EmployeeTableExportController {
 	IEmployeeRepo employeeRepo;
 	
 	@GetMapping("dlut/tabele/eksportet/darbinieks/izvele")
-	public String getTableExport(Employee employee, Model model) {
+	public ResponseEntity<YearMonthEmployeeSelectionDTO> getTableExport() {
 
 		ArrayList<String> yearOptions = emplTimeSheetService.selectYearsFromTimeSheets();
-		String[] monthOptions = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" };
-		model.addAttribute("years", yearOptions);
-		model.addAttribute("month", monthOptions);
-		model.addAttribute("employees", employeeService.selectAllEmployees());
+		List<String> monthOptions = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
+		List<EmployeeDTO> employeeDTOs = employeeService.selectAllEmployees()
+				.stream()
+				.map(employee -> new EmployeeDTO(employee.getName(), employee.getSurname()))
+				.collect(Collectors.toList());
 
-		return "table-export-employee";
+		YearMonthEmployeeSelectionDTO yearMonthEmployeeSelectionDTO = new YearMonthEmployeeSelectionDTO(yearOptions, monthOptions, employeeDTOs);
+
+		return ResponseEntity.ok(yearMonthEmployeeSelectionDTO);
 	}
 
 	@PostMapping("dlut/tabele/eksportet/darbinieks/izvele")
