@@ -73,11 +73,12 @@ public class EmployeeTableExportController {
 	}
 
 	@PostMapping("dlut/tabele/eksportet/darbinieks/izvele")
-	public String postFinanceSourceTableExport(@RequestParam(value = "year") int year,
-			@RequestParam(value = "month") int month, @RequestParam(value = "employee") int employeeId, Model model,
-			@Valid EmployeeAndHourDTO emplHourDTO, BindingResult res) {
+	public ResponseEntity<YearMonthEmployeeSelectionDTO> postTableExport(@Valid @RequestBody YearMonthEmployeeSelectionDTO yearMonthEmployeeSelectionDTO, BindingResult result) {
+		if (result.hasErrors()) {
+			return ResponseEntity.badRequest().body(yearMonthEmployeeSelectionDTO);
+		}
 
-		return "redirect:" + year + "/" + month + "/" + employeeId;
+		return ResponseEntity.ok(yearMonthEmployeeSelectionDTO);
 	}
 
 	@GetMapping("dlut/tabele/eksportet/darbinieks/{year}/{month}/{idempl}")
