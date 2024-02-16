@@ -22,9 +22,4 @@ public class EmployeeDTO {
     @Pattern(regexp = "^\\p{Lu}{1}\\p{Ll}+( \\p{Lu}{1}\\p{Ll}+|-\\p{Lu}{1}\\p{Ll}+)?$")
     private String surname;
 
-    @NotNull
-    private String positionTitle;
-
-    @NotNull
-    private String departmentTitle;
 }
