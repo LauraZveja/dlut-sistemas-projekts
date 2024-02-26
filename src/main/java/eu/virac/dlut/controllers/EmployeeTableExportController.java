@@ -13,6 +13,7 @@ import eu.virac.dlut.models.helpers.YearMonthEmployeeSelectionDTO;
 import jakarta.validation.Valid;
 import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -69,8 +70,9 @@ public class EmployeeTableExportController {
 				.collect(Collectors.toList());
 
 		YearMonthEmployeeSelectionDTO yearMonthEmployeeSelectionDTO = new YearMonthEmployeeSelectionDTO(yearOptions, monthOptions, employeeDTOs);
-
-		return ResponseEntity.ok(yearMonthEmployeeSelectionDTO);
+		//iespējams modeļu klasēs nāksies izmantot @JsonIgnore, lai neaiziet rekursijā
+		//return ResponseEntity.ok(yearMonthEmployeeSelectionDTO);
+		return new ResponseEntity<YearMonthEmployeeSelectionDTO>(yearMonthEmployeeSelectionDTO, HttpStatusCode.valueOf(200));
 	}
 
 	@PostMapping("dlut/tabele/eksportet/darbinieks/izvele")
