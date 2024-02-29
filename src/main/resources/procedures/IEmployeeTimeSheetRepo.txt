@@ -362,3 +362,131 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `GetByYearAndMonthAndUnjustifAbsenceForEmployeeInFinSource` $$
+
+CREATE PROCEDURE `GetByYearAndMonthAndUnjustifAbsenceForEmployeeInFinSource`(
+    IN `yearParam` INT,
+    IN `monthParam` INT,
+    IN `employeeIdParam` INT,
+    IN `finSourceIdParam` INT
+)
+BEGIN
+    SELECT *
+    FROM employee_time_sheet ets
+    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
+      AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
+      AND emp.id_employee = employeeIdParam
+      AND (fow.id_project = finSourceIdParam OR fow.id_base_fin = finSourceIdParam OR fow.id_ac_work_load = finSourceIdParam OR fow.id_indirectvuas = finSourceIdParam)
+      AND ets.remarks = 'N';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `FindByDateAndRemarkRecuperation` $$
+
+CREATE PROCEDURE `FindByDateAndRemarkRecuperation`(
+    IN `yearParam` INT,
+    IN `monthParam` INT,
+    IN `employeeIdParam` INT,
+    IN `finSourceIdParam` INT
+)
+BEGIN
+    SELECT ets.remarks
+    FROM employee_time_sheet ets
+    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
+      AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
+      AND emp.id_employee = employeeIdParam
+      AND (fow.id_project = finSourceIdParam OR fow.id_base_fin = finSourceIdParam OR fow.id_ac_work_load = finSourceIdParam OR fow.id_indirectvuas = finSourceIdParam)
+      AND ets.remarks = 'BR';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `GetWorkedHoursOneEmployeeOnSpecificDate` $$
+
+CREATE PROCEDURE `GetWorkedHoursOneEmployeeOnSpecificDate`(
+    IN `yearParam` INT,
+    IN `monthParam` INT,
+    IN `dayParam` INT,
+    IN `employeeIdParam` INT
+)
+BEGIN
+    SELECT ets.hours_worked
+    FROM employee_time_sheet ets
+    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
+      AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
+      AND EXTRACT(DAY FROM ets.year_month_day) = dayParam
+      AND emp.id_employee = employeeIdParam;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `GetAllByYearMonthDayForEmployeeInFinSource` $$
+
+CREATE PROCEDURE `GetAllByYearMonthDayForEmployeeInFinSource`(
+    IN `yearParam` INT,
+    IN `monthParam` INT,
+    IN `dayParam` INT,
+    IN `employeeIdParam` INT,
+    IN `finSourceIdParam` INT
+)
+BEGIN
+    SELECT *
+    FROM employee_time_sheet ets
+    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
+      AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
+      AND EXTRACT(DAY FROM ets.year_month_day) = dayParam
+      AND emp.id_employee = employeeIdParam
+      AND (fow.id_project = finSourceIdParam OR fow.id_base_fin = finSourceIdParam OR fow.id_ac_work_load = finSourceIdParam OR fow.id_indirectvuas = finSourceIdParam);
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `FindByDateAndSickLeaveS` $$
+
+CREATE PROCEDURE `FindByDateAndSickLeaveS`(
+    IN `dayParam` INT,
+    IN `monthParam` INT,
+    IN `yearParam` INT,
+    IN `employeeIdParam` INT,
+    IN `finSourceIdParam` INT
+)
+BEGIN
+    SELECT *
+    FROM employee_time_sheet ets
+    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE EXTRACT(DAY FROM ets.year_month_day) = dayParam
+      AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
+      AND EXTRACT(YEAR FROM ets.year_month_day) = yearParam
+      AND emp.id_employee = employeeIdParam
+      AND (fow.id_project = finSourceIdParam OR fow.id_base_fin = finSourceIdParam OR fow.id_ac_work_load = finSourceIdParam OR fow.id_indirectvuas = finSourceIdParam)
+      AND ets.sick_leave = 'S';
+END $$
+
+DELIMITER ;
+
