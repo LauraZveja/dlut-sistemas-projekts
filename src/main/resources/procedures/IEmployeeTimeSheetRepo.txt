@@ -1,5 +1,7 @@
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS GetHoursWorkedOnSpecificDayForEmployeeProject $$
+
 CREATE PROCEDURE `GetHoursWorkedOnSpecificDayForEmployeeProject`(
     IN `yearParam` INT,
     IN `monthParam` INT,
@@ -24,6 +26,8 @@ DELIMITER ;
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS GetSickDaysByDateAndEmployeeAndProject $$
+
 CREATE PROCEDURE `GetSickDaysByDateAndEmployeeAndProject`(
     IN `yearParam` INT,
     IN `monthParam` INT,
@@ -46,6 +50,8 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetVacationTimeByDateAndEmployeeAndProject $$
 
 CREATE PROCEDURE `GetVacationTimeByDateAndEmployeeAndProject`(
     IN `yearParam` INT,
@@ -70,6 +76,8 @@ DELIMITER ;
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS GetHoursWorkedForEmployeeBaseFin $$
+
 CREATE PROCEDURE `GetHoursWorkedForEmployeeBaseFin`(
     IN `yearParam` INT,
     IN `monthParam` INT,
@@ -92,6 +100,8 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetEmployeeHoursWorkedOnSpecificDay $$
 
 CREATE PROCEDURE `GetEmployeeHoursWorkedOnSpecificDay`(
     IN `yearParam` INT,
@@ -117,6 +127,8 @@ DELIMITER ;
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS GetSickDaysSByDateAndEmployeeAndFinSource $$
+
 CREATE PROCEDURE `GetSickDaysSByDateAndEmployeeAndFinSource`(
     IN `yearParam` INT,
     IN `monthParam` INT,
@@ -139,6 +151,8 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetByYearMonthSickLeaveSForEmployeeFinSource $$
 
 CREATE PROCEDURE `GetByYearMonthSickLeaveSForEmployeeFinSource`(
     IN `yearParam` INT,
@@ -163,6 +177,8 @@ DELIMITER ;
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS GetByYearAndMonthAndSickLeaveSbForEmployeeFinSource $$
+
 CREATE PROCEDURE `GetByYearAndMonthAndSickLeaveSbForEmployeeFinSource`(
     IN `yearParam` INT,
     IN `monthParam` INT,
@@ -184,6 +200,8 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetByYearAndMonthAndMissionEmployeeFinSource $$
 
 CREATE PROCEDURE `GetByYearAndMonthAndMissionEmployeeFinSource`(
     IN `yearParam` INT,
@@ -208,6 +226,8 @@ DELIMITER ;
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS GetByYearAndMonthAndOrderVacation $$
+
 CREATE PROCEDURE `GetByYearAndMonthAndOrderVacation`(
     IN `yearParam` INT,
     IN `monthParam` INT
@@ -225,6 +245,8 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetByYearMonthForEmployeeInFinSource $$
 
 CREATE PROCEDURE `GetByYearMonthForEmployeeInFinSource`(
     IN `yearParam` INT,
@@ -248,6 +270,8 @@ DELIMITER ;
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS GetByYearAndMonthAndOrderOther $$
+
 CREATE PROCEDURE `GetByYearAndMonthAndOrderOther`(
     IN `yearParam` INT,
     IN `monthParam` INT
@@ -265,6 +289,8 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetHoursWorkedForEmployeeInBaseFin $$
 
 CREATE PROCEDURE `GetHoursWorkedForEmployeeInBaseFin`(
     IN `yearParam` INT,
@@ -289,6 +315,8 @@ DELIMITER ;
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS GetHoursWorkedForEmployeeInAcademicWorkLoad $$
+
 CREATE PROCEDURE `GetHoursWorkedForEmployeeInAcademicWorkLoad`(
     IN `yearParam` INT,
     IN `monthParam` INT,
@@ -311,6 +339,8 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetHoursWorkedForEmployeeInIndirectVuas $$
 
 CREATE PROCEDURE `GetHoursWorkedForEmployeeInIndirectVuas`(
     IN `yearParam` INT,

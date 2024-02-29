@@ -1,5 +1,7 @@
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS GetAllEmployeesInOneProject $$
+
 CREATE PROCEDURE GetAllEmployeesInOneProject(IN projId INT)
 BEGIN
     SELECT * FROM employee e
@@ -12,6 +14,8 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetAllEmployeesInBaseFin $$
 
 CREATE PROCEDURE GetAllEmployeesInBaseFin(IN baseFinId INT)
 BEGIN
@@ -26,6 +30,8 @@ DELIMITER ;
 
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS GetAllEmployeesInAcademicWorkLoad $$
+
 CREATE PROCEDURE GetAllEmployeesInAcademicWorkLoad(IN academicWorkLoadId INT)
 BEGIN
     SELECT e.id_employee, e.is_elected, e.name, e.surname, e.position, e.is_elected, e.work_contract_no_date, e.id_department, e.id_employee
@@ -39,6 +45,8 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetAllEmployeesInIndirectVuas $$
 
 CREATE PROCEDURE GetAllEmployeesInIndirectVuas(IN indirectVuasId INT)
 BEGIN

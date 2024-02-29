@@ -1,5 +1,7 @@
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS getBaseFinForEmployee $$
+
 CREATE PROCEDURE `getBaseFinForEmployee`(
     IN `yearParam` INT,
     IN `monthParam` INT,

@@ -1,5 +1,7 @@
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS getAcademicWorkLoadForEmployee $$
+
 CREATE PROCEDURE `getAcademicWorkLoadForEmployee`(
     IN `yearParam` INT,
     IN `monthParam` INT,
