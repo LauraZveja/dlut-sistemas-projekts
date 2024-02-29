@@ -1,0 +1,22 @@
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `FindByDateAndOrderVacationIDAndDesignation` $$
+
+CREATE PROCEDURE `FindByDateAndOrderVacationIDAndDesignation`(
+    IN `dayParam` INT,
+    IN `monthParam` INT,
+    IN `yearParam` INT,
+    IN `employeeIdParam` INT
+)
+BEGIN
+    SELECT *
+    FROM order_vacation ov
+    JOIN employee_time_sheet ets ON ov.id_order = ets.id_ord_vacation
+    WHERE EXTRACT(DAY FROM ets.year_month_day) = dayParam
+      AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
+      AND EXTRACT(YEAR FROM ets.year_month_day) = yearParam
+      AND ov.designation = 'AI'
+      AND ov.id_employee = employeeIdParam;
+END $$
+
+DELIMITER ;
