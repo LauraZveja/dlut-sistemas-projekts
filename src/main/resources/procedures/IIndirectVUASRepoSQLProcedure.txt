@@ -1,0 +1,23 @@
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `GetIndirectVuasByEmployeeAndDate` $$
+
+CREATE PROCEDURE `GetIndirectVuasByEmployeeAndDate`(
+    IN `yearParam` INT,
+    IN `monthParam` INT,
+    IN `employeeIdParam` INT
+)
+BEGIN
+    SELECT iv.id_fin_source, iv.code, iv.title
+    FROM indirect_vuas iv
+    JOIN finance_order_work fow ON iv.id_fin_source = fow.id_indirectvuas
+    JOIN employee_time_sheet ets ON fow.id_fin_ord_work = ets.id_fin_ord_work
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
+      AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
+      AND emp.id_employee = employeeIdParam
+    GROUP BY iv.id_fin_source;
+END $$
+
+DELIMITER ;
