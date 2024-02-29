@@ -1,0 +1,83 @@
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `FindByDateAndHolidayTitle` $$
+
+CREATE PROCEDURE `FindByDateAndHolidayTitle`(
+    IN `dayParam` INT,
+    IN `monthParam` INT,
+    IN `yearParam` INT
+)
+BEGIN
+    SELECT *
+    FROM holiday_preholiday_transfered_holiday h
+    JOIN day_status d ON h.id_day_status = d.id_day_status
+    WHERE EXTRACT(DAY FROM h.date) = dayParam
+      AND EXTRACT(MONTH FROM h.date) = monthParam
+      AND EXTRACT(YEAR FROM h.date) = yearParam
+      AND d.day_title LIKE 'Sv%';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `FindByDateAndTransferredWorkDayRemark` $$
+
+CREATE PROCEDURE `FindByDateAndTransferredWorkDayRemark`(
+    IN `dayParam` INT,
+    IN `monthParam` INT,
+    IN `yearParam` INT
+)
+BEGIN
+    SELECT *
+    FROM holiday_preholiday_transfered_holiday h
+    JOIN day_status d ON h.id_day_status = d.id_day_status
+    WHERE EXTRACT(DAY FROM h.date) = dayParam
+      AND EXTRACT(MONTH FROM h.date) = monthParam
+      AND EXTRACT(YEAR FROM h.date) = yearParam
+      AND d.day_title = 'Pārcelta-D';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `FindByDateAndTransferredHolidayRemark` $$
+
+CREATE PROCEDURE `FindByDateAndTransferredHolidayRemark`(
+    IN `dayParam` INT,
+    IN `monthParam` INT,
+    IN `yearParam` INT
+)
+BEGIN
+    SELECT *
+    FROM holiday_preholiday_transfered_holiday h
+    JOIN day_status d ON h.id_day_status = d.id_day_status
+    WHERE EXTRACT(DAY FROM h.date) = dayParam
+      AND EXTRACT(MONTH FROM h.date) = monthParam
+      AND EXTRACT(YEAR FROM h.date) = yearParam
+      AND d.day_title = 'Pārcelta-B';
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `FindByDateAndPreHoliday` $$
+
+CREATE PROCEDURE `FindByDateAndPreHoliday`(
+    IN `dayParam` INT,
+    IN `monthParam` INT,
+    IN `yearParam` INT
+)
+BEGIN
+    SELECT *
+    FROM holiday_preholiday_transfered_holiday h
+    JOIN day_status d ON h.id_day_status = d.id_day_status
+    WHERE EXTRACT(DAY FROM h.date) = dayParam
+      AND EXTRACT(MONTH FROM h.date) = monthParam
+      AND EXTRACT(YEAR FROM h.date) = yearParam
+      AND d.day_title = 'Pirmssvētku';
+END $$
+
+DELIMITER ;
