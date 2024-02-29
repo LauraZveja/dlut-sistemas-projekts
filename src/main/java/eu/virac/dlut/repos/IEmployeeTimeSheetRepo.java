@@ -19,17 +19,15 @@ public interface IEmployeeTimeSheetRepo extends CrudRepository<EmployeeTimeSheet
 //			nativeQuery = true)
 //	ArrayList<Float> getHoursWorkedForEmployee(String year, String month, int idEmployee);
 
-    @Query(value = "SELECT ets.hours_worked FROM employee_time_sheet ets JOIN finance_order_work fow ON ets.id_fin_ord_work=fow.id_fin_ord_work "
-            + "JOIN order_work ow ON fow.id_ord_work=ow.id_order "
-            + "JOIN project p ON fow.id_project=p.id_fin_source "
-            + "JOIN employee emp ON ow.id_employee=emp.id_employee "
-            + "WHERE (EXTRACT(YEAR FROM ets.year_month_day) = ?1 AND EXTRACT(MONTH FROM ets.year_month_day) = ?2 ) "
-            + "AND emp.id_employee = ?3 AND p.id_fin_source = ?4",
-            nativeQuery = true)
-    ArrayList<Double> getHoursWorkedForEmployeeInProject(int year, int month, int idEmployee, int idProject);
+    @Query(value = "CALL GetHoursWorkedForEmployeeInProject(:yearParam, :monthParam, :idEmployeeParam, :idProjectParam)", nativeQuery = true)
+    ArrayList<Double> getHoursWorkedForEmployeeInProject(
+            @Param("yearParam") int year,
+            @Param("monthParam") int month,
+            @Param("idEmployeeParam") int idEmployee,
+            @Param("idProjectParam") int idProject
+    );
 
-    @Query(value = "SELECT DISTINCT (EXTRACT(YEAR FROM year_month_day)) FROM employee_time_sheet",
-            nativeQuery = true)
+    @Query(value = "CALL GetDistinctYearsFromTimeSheet()", nativeQuery = true)
     ArrayList<String> getDistinctYearsFromTimeSheet();
 
     EmployeeTimeSheet findByFinOrdWorkIdFinOrdWork(int finOrdWorkId);

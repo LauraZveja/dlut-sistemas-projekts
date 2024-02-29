@@ -1,5 +1,40 @@
 DELIMITER $$
 
+DROP PROCEDURE IF EXISTS GetDistinctYearsFromTimeSheet $$
+
+CREATE PROCEDURE GetHoursWorkedForEmployeeInProject(
+    IN yearParam INT,
+    IN monthParam INT,
+    IN idEmployeeParam INT,
+    IN idProjectParam INT
+)
+BEGIN
+    SELECT ets.hours_worked
+    FROM employee_time_sheet ets
+    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN project p ON fow.id_project = p.id_fin_source
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE (EXTRACT(YEAR FROM ets.year_month_day) = yearParam AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam)
+    AND emp.id_employee = idEmployeeParam AND p.id_fin_source = idProjectParam;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetDistinctYearsFromTimeSheet $$
+
+CREATE PROCEDURE GetDistinctYearsFromTimeSheet()
+BEGIN
+    SELECT DISTINCT EXTRACT(YEAR FROM year_month_day) AS distinct_year FROM employee_time_sheet;
+END $$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
 DROP PROCEDURE IF EXISTS GetHoursWorkedOnSpecificDayForEmployeeProject $$
 
 CREATE PROCEDURE `GetHoursWorkedOnSpecificDayForEmployeeProject`(
