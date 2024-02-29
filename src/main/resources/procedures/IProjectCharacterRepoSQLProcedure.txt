@@ -1,0 +1,15 @@
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `FindProjectCharacterByProjId` $$
+
+CREATE PROCEDURE `FindProjectCharacterByProjId`(
+    IN `projectIdParam` INT
+)
+BEGIN
+    SELECT pch.proj_char_title
+    FROM project_character pch
+    JOIN project p ON p.id_proj_char = pch.id_proj_char
+    WHERE p.id_fin_source = projectIdParam;
+END $$
+
+DELIMITER ;
