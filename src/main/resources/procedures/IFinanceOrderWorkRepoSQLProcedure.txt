@@ -1,0 +1,95 @@
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `GetPositionInProjectForEmployee` $$
+
+CREATE PROCEDURE `GetPositionInProjectForEmployee`(
+    IN `employeeIdParam` INT,
+    IN `finSourceIdParam` INT
+)
+BEGIN
+    SELECT fow.position_in_project
+    FROM finance_order_work fow
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE emp.id_employee = employeeIdParam AND fow.id_project = finSourceIdParam;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `GetPayPerHourByEmployeeAndProject` $$
+
+CREATE PROCEDURE `GetPayPerHourByEmployeeAndProject`(
+    IN `employeeIdParam` INT,
+    IN `projectIdParam` INT
+)
+BEGIN
+    SELECT fow.pay_per_hour
+    FROM finance_order_work fow
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE emp.id_employee = employeeIdParam AND fow.id_project = projectIdParam;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `GetPayPerHourByEmployeeInFinSource` $$
+
+CREATE PROCEDURE `GetPayPerHourByEmployeeInFinSource`(
+    IN `employeeIdParam` INT,
+    IN `finSourceIdParam` INT
+)
+BEGIN
+    SELECT fow.pay_per_hour
+    FROM finance_order_work fow
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE emp.id_employee = employeeIdParam
+      AND (fow.id_project = finSourceIdParam OR fow.id_base_fin = finSourceIdParam OR fow.id_ac_work_load = finSourceIdParam OR fow.id_indirectvuas = finSourceIdParam);
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `GetFinanceOrderWorkByEmployeeAndDetails` $$
+
+CREATE PROCEDURE `GetFinanceOrderWorkByEmployeeAndDetails`(
+    IN `employeeIdParam` INT,
+    IN `financeSourceIdParam` INT,
+    IN `positionParam` VARCHAR(255)
+)
+BEGIN
+    SELECT *
+    FROM finance_order_work fow
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE emp.id_employee = employeeIdParam
+      AND (fow.id_project = financeSourceIdParam OR fow.id_base_fin = financeSourceIdParam OR fow.id_ac_work_load = financeSourceIdParam OR fow.id_indirectvuas = financeSourceIdParam)
+      AND fow.position_in_project = positionParam;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `GetByEmployeeIdAndFinanceSource` $$
+
+CREATE PROCEDURE `GetByEmployeeIdAndFinanceSource`(
+    IN `employeeIdParam` INT,
+    IN `financeSourceIdParam` INT
+)
+BEGIN
+    SELECT *
+    FROM finance_order_work fow
+    JOIN order_work ow ON fow.id_ord_work = ow.id_order
+    JOIN employee emp ON ow.id_employee = emp.id_employee
+    WHERE emp.id_employee = employeeIdParam
+      AND (fow.id_project = financeSourceIdParam OR fow.id_base_fin = financeSourceIdParam OR fow.id_ac_work_load = financeSourceIdParam OR fow.id_indirectvuas = financeSourceIdParam);
+END $$
+
+DELIMITER ;
+
