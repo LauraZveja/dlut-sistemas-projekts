@@ -1,0 +1,22 @@
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `FindByDateAndOrderWorkMissionIDAndDesignation` $$
+
+CREATE PROCEDURE `FindByDateAndOrderWorkMissionIDAndDesignation`(
+    IN `dayParam` INT,
+    IN `monthParam` INT,
+    IN `yearParam` INT,
+    IN `employeeIdParam` INT
+)
+BEGIN
+    SELECT *
+    FROM order_mission om
+    JOIN employee_time_sheet ets ON om.id_order = ets.id_ord_mission
+    WHERE EXTRACT(DAY FROM ets.year_month_day) = dayParam
+      AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
+      AND EXTRACT(YEAR FROM ets.year_month_day) = yearParam
+      AND om.designation = 'KD'
+      AND om.id_employee = employeeIdParam;
+END $$
+
+DELIMITER ;
