@@ -15,6 +15,7 @@ import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ import eu.virac.dlut.services.IFullTimeEquivalentService;
 import eu.virac.dlut.services.IHoursInMonthService;
 import eu.virac.dlut.services.ITableExportService;
 
-@RestController
+@Controller
 public class EmployeeTableExportController {
 
 	@Autowired

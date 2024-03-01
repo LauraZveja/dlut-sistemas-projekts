@@ -16,7 +16,7 @@ BEGIN
       AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
       AND EXTRACT(YEAR FROM ets.year_month_day) = yearParam
       AND ov.designation = 'AI'
-      AND ov.id_employee = employeeIdParam;
+      AND ov.id_employee_order = employeeIdParam;
 END $$
 
 DELIMITER ;

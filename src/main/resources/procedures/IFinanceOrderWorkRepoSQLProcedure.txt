@@ -10,7 +10,7 @@ BEGIN
     SELECT fow.position_in_project
     FROM finance_order_work fow
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
-    JOIN employee emp ON ow.id_employee = emp.id_employee
+    JOIN employee emp ON ow.id_employee_order = emp.id_employee
     WHERE emp.id_employee = employeeIdParam AND fow.id_project = finSourceIdParam;
 END $$
 
@@ -28,7 +28,7 @@ BEGIN
     SELECT fow.pay_per_hour
     FROM finance_order_work fow
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
-    JOIN employee emp ON ow.id_employee = emp.id_employee
+    JOIN employee emp ON ow.id_employee_order = emp.id_employee
     WHERE emp.id_employee = employeeIdParam AND fow.id_project = projectIdParam;
 END $$
 
@@ -46,7 +46,7 @@ BEGIN
     SELECT fow.pay_per_hour
     FROM finance_order_work fow
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
-    JOIN employee emp ON ow.id_employee = emp.id_employee
+    JOIN employee emp ON ow.id_employee_order = emp.id_employee
     WHERE emp.id_employee = employeeIdParam
       AND (fow.id_project = finSourceIdParam OR fow.id_base_fin = finSourceIdParam OR fow.id_ac_work_load = finSourceIdParam OR fow.id_indirectvuas = finSourceIdParam);
 END $$
@@ -66,7 +66,7 @@ BEGIN
     SELECT *
     FROM finance_order_work fow
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
-    JOIN employee emp ON ow.id_employee = emp.id_employee
+    JOIN employee emp ON ow.id_employee_order = emp.id_employee
     WHERE emp.id_employee = employeeIdParam
       AND (fow.id_project = financeSourceIdParam OR fow.id_base_fin = financeSourceIdParam OR fow.id_ac_work_load = financeSourceIdParam OR fow.id_indirectvuas = financeSourceIdParam)
       AND fow.position_in_project = positionParam;
@@ -86,7 +86,7 @@ BEGIN
     SELECT *
     FROM finance_order_work fow
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
-    JOIN employee emp ON ow.id_employee = emp.id_employee
+    JOIN employee emp ON ow.id_employee_order = emp.id_employee
     WHERE emp.id_employee = employeeIdParam
       AND (fow.id_project = financeSourceIdParam OR fow.id_base_fin = financeSourceIdParam OR fow.id_ac_work_load = financeSourceIdParam OR fow.id_indirectvuas = financeSourceIdParam);
 END $$

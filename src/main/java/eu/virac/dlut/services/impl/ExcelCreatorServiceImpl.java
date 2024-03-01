@@ -68,6 +68,7 @@ public class ExcelCreatorServiceImpl implements IExcelCreatorService{
 			allEmplInFinSource = tableExportService.selectEmployeesAndHoursForIndirectVuasForYearMonth(finSource.getIdFinSource(), year, month);
 					
 		//FileInputStream fis =new FileInputStream(new File("C:\\Users\\elina\\eclipsePrakseI\\dlut\\src\\main\\resources\\templates\\finance-source-excel-template.xlsx"));
+		//TODO jāmaina uz Tavu ceļu, bet labāk uzlikt, lai ielasa no classresources.
 		FileInputStream fis =new FileInputStream(new File("C:\\Users\\elina\\eclipsePrakseI\\dlut\\src\\main\\resources\\templates\\excel-template-finance-source.xlsx"));
 		//Workbook wb= new XSSFWorkbook(fis);
 		Workbook wb= WorkbookFactory.create(fis);

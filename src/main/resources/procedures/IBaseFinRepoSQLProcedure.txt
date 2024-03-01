@@ -13,7 +13,7 @@ BEGIN
     JOIN finance_order_work fow ON bf.id_fin_source = fow.id_base_fin
     JOIN employee_time_sheet ets ON fow.id_fin_ord_work = ets.id_fin_ord_work_employee
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
-    JOIN employee emp ON ow.id_employee = emp.id_employee
+    JOIN employee emp ON ow.id_employee_order = emp.id_employee
     WHERE (EXTRACT(YEAR FROM ets.year_month_day) = yearParam AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam)
     AND emp.id_employee = employeeIdParam
     GROUP BY bf.id_fin_source;

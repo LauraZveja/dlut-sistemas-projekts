@@ -5,7 +5,7 @@ DROP PROCEDURE IF EXISTS GetAllEmployeesInOneProject $$
 CREATE PROCEDURE GetAllEmployeesInOneProject(IN projId INT)
 BEGIN
     SELECT * FROM employee e
-    JOIN order_work ow ON e.id_employee = ow.id_employee
+    JOIN order_work ow ON e.id_employee = ow.id_employee_order
     JOIN finance_order_work fow ON ow.id_order = fow.id_ord_work
     JOIN project p ON fow.id_project = p.id_fin_source
     WHERE p.id_fin_source = projId;

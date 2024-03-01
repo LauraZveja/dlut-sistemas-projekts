@@ -16,7 +16,7 @@ BEGIN
       AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
       AND EXTRACT(YEAR FROM ets.year_month_day) = yearParam
       AND om.designation = 'KD'
-      AND om.id_employee = employeeIdParam;
+      AND om.id_employee_order = employeeIdParam;
 END $$
 
 DELIMITER ;
