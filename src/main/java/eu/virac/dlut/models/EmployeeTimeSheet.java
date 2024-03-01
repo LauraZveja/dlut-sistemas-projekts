@@ -47,7 +47,7 @@ public class EmployeeTimeSheet {
 	private LocalDate yearMonthDay;
 	
 	@ManyToOne
-	@JoinColumn(name = "idFinOrdWork")
+	@JoinColumn(name = "idFinOrdWorkEmployee", referencedColumnName = "idFinOrdWork")
 	private FinanceOrderWork finOrdWork; //darbinieks no tā
 	
 	@Column(name = "hoursWorked")

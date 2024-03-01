@@ -58,7 +58,7 @@ public class FinancePlanning {
 	private IndirectVUAS indVUAS;
 	
 	@ManyToOne
-	@JoinColumn(name = "idEmployee"/*, nullable = false*/)
+	@JoinColumn(name = "idEmployeeFinancePlanning", referencedColumnName = "idEmployee"/*, nullable = false*/)
 	private Employee employee;
 	
 	@Column(name = "YearMonth")

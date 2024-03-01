@@ -10,7 +10,7 @@ CREATE PROCEDURE `FindByDateAndHolidayTitle`(
 BEGIN
     SELECT *
     FROM holiday_preholiday_transfered_holiday h
-    JOIN day_status d ON h.id_day_status = d.id_day_status
+    JOIN day_status d ON h.id_day_status_holiday = d.id_day_status
     WHERE EXTRACT(DAY FROM h.date) = dayParam
       AND EXTRACT(MONTH FROM h.date) = monthParam
       AND EXTRACT(YEAR FROM h.date) = yearParam
@@ -31,7 +31,7 @@ CREATE PROCEDURE `FindByDateAndTransferredWorkDayRemark`(
 BEGIN
     SELECT *
     FROM holiday_preholiday_transfered_holiday h
-    JOIN day_status d ON h.id_day_status = d.id_day_status
+    JOIN day_status d ON h.id_day_status_holiday = d.id_day_status
     WHERE EXTRACT(DAY FROM h.date) = dayParam
       AND EXTRACT(MONTH FROM h.date) = monthParam
       AND EXTRACT(YEAR FROM h.date) = yearParam
@@ -52,7 +52,7 @@ CREATE PROCEDURE `FindByDateAndTransferredHolidayRemark`(
 BEGIN
     SELECT *
     FROM holiday_preholiday_transfered_holiday h
-    JOIN day_status d ON h.id_day_status = d.id_day_status
+    JOIN day_status d ON h.id_day_status_holiday = d.id_day_status
     WHERE EXTRACT(DAY FROM h.date) = dayParam
       AND EXTRACT(MONTH FROM h.date) = monthParam
       AND EXTRACT(YEAR FROM h.date) = yearParam
@@ -73,7 +73,7 @@ CREATE PROCEDURE `FindByDateAndPreHoliday`(
 BEGIN
     SELECT *
     FROM holiday_preholiday_transfered_holiday h
-    JOIN day_status d ON h.id_day_status = d.id_day_status
+    JOIN day_status d ON h.id_day_status_holiday = d.id_day_status
     WHERE EXTRACT(DAY FROM h.date) = dayParam
       AND EXTRACT(MONTH FROM h.date) = monthParam
       AND EXTRACT(YEAR FROM h.date) = yearParam

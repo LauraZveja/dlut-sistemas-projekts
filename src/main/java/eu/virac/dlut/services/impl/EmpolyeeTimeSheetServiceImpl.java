@@ -92,7 +92,7 @@ public class EmpolyeeTimeSheetServiceImpl implements IEmployeeTimeSheetService {
 	//pārbaude vai diena ir ieraksīta kā atpūtas diena
 	@Override
 	public boolean isDayRecuperation(int year, int month, int idEmployee, int finSourceId) {
-		EmployeeTimeSheet ets = emplTimeSheetRepo.findByDateAndRemarkRecuperation(year, month, idEmployee, finSourceId);
+		String ets = emplTimeSheetRepo.findByDateAndRemarkRecuperation(year, month, idEmployee, finSourceId);
 		if (ets != null)
 			return true;
 

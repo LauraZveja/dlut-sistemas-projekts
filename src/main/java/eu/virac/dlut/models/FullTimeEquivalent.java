@@ -50,7 +50,7 @@ public class FullTimeEquivalent {
 		
 	//saite ar darbinieku
 	@ManyToOne
-	@JoinColumn(name = "idEmployee"/*, nullable = false*/)
+	@JoinColumn(name = "idEmployeeFullTimeEquivalent", referencedColumnName = "idEmployee"/*, nullable = false*/)
 	private Employee employee;
 	
 

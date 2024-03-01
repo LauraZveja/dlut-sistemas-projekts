@@ -1,6 +1,6 @@
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS GetDistinctYearsFromTimeSheet $$
+DROP PROCEDURE IF EXISTS GetHoursWorkedForEmployeeInProject $$
 
 CREATE PROCEDURE GetHoursWorkedForEmployeeInProject(
     IN yearParam INT,
@@ -11,7 +11,7 @@ CREATE PROCEDURE GetHoursWorkedForEmployeeInProject(
 BEGIN
     SELECT ets.hours_worked
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN project p ON fow.id_project = p.id_fin_source
     JOIN employee emp ON ow.id_employee = emp.id_employee
@@ -47,7 +47,7 @@ CREATE PROCEDURE `GetHoursWorkedOnSpecificDayForEmployeeProject`(
 BEGIN
     SELECT ets.hours_worked
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -72,7 +72,7 @@ CREATE PROCEDURE `GetSickDaysByDateAndEmployeeAndProject`(
 BEGIN
     SELECT COUNT(ets.sick_leave)
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -97,7 +97,7 @@ CREATE PROCEDURE `GetVacationTimeByDateAndEmployeeAndProject`(
 BEGIN
     SELECT COUNT(ets.id_ord_vacation)
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -122,7 +122,7 @@ CREATE PROCEDURE `GetHoursWorkedForEmployeeBaseFin`(
 BEGIN
     SELECT ets.hours_worked
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN base_fin b ON fow.id_project = b.id_fin_source
     JOIN employee emp ON ow.id_employee = emp.id_employee
@@ -148,7 +148,7 @@ CREATE PROCEDURE `GetEmployeeHoursWorkedOnSpecificDay`(
 BEGIN
     SELECT ets.hours_worked
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -173,7 +173,7 @@ CREATE PROCEDURE `GetSickDaysSByDateAndEmployeeAndFinSource`(
 BEGIN
     SELECT COUNT(ets.sick_leave)
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -198,7 +198,7 @@ CREATE PROCEDURE `GetByYearMonthSickLeaveSForEmployeeFinSource`(
 BEGIN
     SELECT *
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -223,7 +223,7 @@ CREATE PROCEDURE `GetByYearAndMonthAndSickLeaveSbForEmployeeFinSource`(
 BEGIN
     SELECT *
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE (EXTRACT(YEAR FROM ets.year_month_day) = yearParam AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam)
@@ -247,7 +247,7 @@ CREATE PROCEDURE `GetByYearAndMonthAndMissionEmployeeFinSource`(
 BEGIN
     SELECT *
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -270,7 +270,7 @@ CREATE PROCEDURE `GetByYearAndMonthAndOrderVacation`(
 BEGIN
     SELECT *
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
       AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
@@ -292,7 +292,7 @@ CREATE PROCEDURE `GetByYearMonthForEmployeeInFinSource`(
 BEGIN
     SELECT *
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -314,7 +314,7 @@ CREATE PROCEDURE `GetByYearAndMonthAndOrderOther`(
 BEGIN
     SELECT *
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
       AND EXTRACT(MONTH FROM ets.year_month_day) = monthParam
@@ -336,7 +336,7 @@ CREATE PROCEDURE `GetHoursWorkedForEmployeeInBaseFin`(
 BEGIN
     SELECT ets.hours_worked
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN base_fin b ON fow.id_base_fin = b.id_fin_source
     JOIN employee emp ON ow.id_employee = emp.id_employee
@@ -361,7 +361,7 @@ CREATE PROCEDURE `GetHoursWorkedForEmployeeInAcademicWorkLoad`(
 BEGIN
     SELECT ets.hours_worked
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN academic_work_load awl ON fow.id_ac_work_load = awl.id_fin_source
     JOIN employee emp ON ow.id_employee = emp.id_employee
@@ -386,7 +386,7 @@ CREATE PROCEDURE `GetHoursWorkedForEmployeeInIndirectVuas`(
 BEGIN
     SELECT ets.hours_worked
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN indirect_vuas i ON fow.id_indirectvuas = i.id_fin_source
     JOIN employee emp ON ow.id_employee = emp.id_employee
@@ -411,7 +411,7 @@ CREATE PROCEDURE `GetByYearAndMonthAndUnjustifAbsenceForEmployeeInFinSource`(
 BEGIN
     SELECT *
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -436,7 +436,7 @@ CREATE PROCEDURE `FindByDateAndRemarkRecuperation`(
 BEGIN
     SELECT ets.remarks
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -461,7 +461,7 @@ CREATE PROCEDURE `GetWorkedHoursOneEmployeeOnSpecificDate`(
 BEGIN
     SELECT ets.hours_worked
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -486,7 +486,7 @@ CREATE PROCEDURE `GetAllByYearMonthDayForEmployeeInFinSource`(
 BEGIN
     SELECT *
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(YEAR FROM ets.year_month_day) = yearParam
@@ -512,7 +512,7 @@ CREATE PROCEDURE `FindByDateAndSickLeaveS`(
 BEGIN
     SELECT *
     FROM employee_time_sheet ets
-    JOIN finance_order_work fow ON ets.id_fin_ord_work = fow.id_fin_ord_work
+    JOIN finance_order_work fow ON ets.id_fin_ord_work_employee = fow.id_fin_ord_work
     JOIN order_work ow ON fow.id_ord_work = ow.id_order
     JOIN employee emp ON ow.id_employee = emp.id_employee
     WHERE EXTRACT(DAY FROM ets.year_month_day) = dayParam

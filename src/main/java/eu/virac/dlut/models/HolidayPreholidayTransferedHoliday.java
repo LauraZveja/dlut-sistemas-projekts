@@ -42,7 +42,7 @@ public class HolidayPreholidayTransferedHoliday {
 	
 	//saite ar dienas statusu
 	@ManyToOne
-	@JoinColumn(name = "idDayStatus", nullable = false)
+	@JoinColumn(name = "idDayStatusHoliday", nullable = false, referencedColumnName = "idDayStatus")
 	private DayStatus dayStatus;
 
 	public HolidayPreholidayTransferedHoliday(LocalDate date, DayStatus dayStatus) {

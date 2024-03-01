@@ -68,7 +68,7 @@ public class Order {
 	
 	//saite ar darbinieku
 	@ManyToOne
-	@JoinColumn(name = "idEmployee"/*, nullable = false*/)
+	@JoinColumn(name = "idEmployeeOrder", referencedColumnName = "idEmployee"/*, nullable = false*/)
 	private Employee employee;
 	
 	//private String orderTitle;

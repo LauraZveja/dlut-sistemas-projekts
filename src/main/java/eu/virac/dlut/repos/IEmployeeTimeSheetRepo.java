@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface IEmployeeTimeSheetRepo extends CrudRepository<EmployeeTimeSheet, Integer> {
 
-//	@Query(value = "SELECT ets.hours_worked FROM employee_time_sheet ets JOIN finance_order_work fow ON ets.id_fin_ord_work=fow.id_fin_ord_work "
+//	@Query(value = "SELECT ets.hours_worked FROM employee_time_sheet ets JOIN finance_order_work fow ON ets.id_fin_ord_work_employee=fow.id_fin_ord_work "
 //			+ "JOIN order_work ow ON fow.id_ord_work=ow.id_order "
 //			+ "JOIN employee emp ON ow.id_employee=emp.id_employee "
 //			+ "WHERE (EXTRACT(YEAR FROM ets.year_month_day) = ?1 AND EXTRACT(MONTH FROM ets.year_month_day) = ?2 ) AND emp.id_employee = ?3 ",
@@ -32,7 +32,7 @@ public interface IEmployeeTimeSheetRepo extends CrudRepository<EmployeeTimeSheet
 
     EmployeeTimeSheet findByFinOrdWorkIdFinOrdWork(int finOrdWorkId);
 
-//	@Query(value = "SELECT ets.hours_worked FROM employee_time_sheet ets JOIN finance_order_work fow ON ets.id_fin_ord_work=fow.id_fin_ord_work "
+//	@Query(value = "SELECT ets.hours_worked FROM employee_time_sheet ets JOIN finance_order_work fow ON ets.id_fin_ord_work_employee=fow.id_fin_ord_work "
 //			+ "JOIN order_work ow ON fow.id_ord_work=ow.id_order "
 //			+ "JOIN employee emp ON ow.id_employee=emp.id_employee "
 //			+ "WHERE (EXTRACT(YEAR FROM ets.year_month_day) = ?1 AND EXTRACT(MONTH FROM ets.year_month_day) = ?2 AND EXTRACT(DAY FROM ets.year_month_day) = ?3 ) AND emp.id_employee = ?4 AND fow.id_project = ?5 ",
@@ -148,7 +148,7 @@ public interface IEmployeeTimeSheetRepo extends CrudRepository<EmployeeTimeSheet
 
 
     @Query(value = "CALL FindByDateAndRemarkRecuperation(:year, :month, :employeeId, :finSourceId);", nativeQuery = true)
-    EmployeeTimeSheet findByDateAndRemarkRecuperation(@Param("year") int year,
+    String findByDateAndRemarkRecuperation(@Param("year") int year,
                                                       @Param("month") int month,
                                                       @Param("employeeId") int idEmployee,
                                                       @Param("finSourceId") int finSourceId);
