@@ -189,7 +189,7 @@ public class ExcelCreatorServiceImpl implements IExcelCreatorService{
 				.selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
 
 		FileInputStream fis = new FileInputStream(new File(
-				"C:\\Users\\elina\\eclipsePrakseI\\dlut\\src\\main\\resources\\templates\\excel-template-employee.xlsx"));
+				"C:\\Users\\laura\\SpringBootIntellij\\dlut-sistemas-projekts\\src\\main\\resources\\templates\\excel-template-employee.xlsx"));
 		Workbook wb = WorkbookFactory.create(fis);
 
 		Workbook workbook = wb;
