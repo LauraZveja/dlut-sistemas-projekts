@@ -1,9 +1,6 @@
 package eu.virac.dlut.services.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -68,8 +65,8 @@ public class ExcelCreatorServiceImpl implements IExcelCreatorService{
 			allEmplInFinSource = tableExportService.selectEmployeesAndHoursForIndirectVuasForYearMonth(finSource.getIdFinSource(), year, month);
 					
 		//FileInputStream fis =new FileInputStream(new File("C:\\Users\\elina\\eclipsePrakseI\\dlut\\src\\main\\resources\\templates\\finance-source-excel-template.xlsx"));
-		//TODO jāmaina uz Tavu ceļu, bet labāk uzlikt, lai ielasa no classresources.
-		FileInputStream fis =new FileInputStream(new File("C:\\Users\\elina\\eclipsePrakseI\\dlut\\src\\main\\resources\\templates\\excel-template-finance-source.xlsx"));
+		//FileInputStream fis = new FileInputStream(getClass().getResourceAsStream("/templates/excel-template-finance-source.xlsx"));
+		InputStream fis = getClass().getResourceAsStream("/templates/excel-template-finance-source.xlsx");
 		//Workbook wb= new XSSFWorkbook(fis);
 		Workbook wb= WorkbookFactory.create(fis);
 		
@@ -188,8 +185,8 @@ public class ExcelCreatorServiceImpl implements IExcelCreatorService{
 		ArrayList<EmployeeAndHourDTO> list = tableExportService
 				.selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
 
-		FileInputStream fis = new FileInputStream(new File(
-				"C:\\Users\\laura\\SpringBootIntellij\\dlut-sistemas-projekts\\src\\main\\resources\\templates\\excel-template-employee.xlsx"));
+		InputStream fis = getClass().getResourceAsStream("/templates/excel-template-employee.xlsx");
+		//FileInputStream fis = new FileInputStream(getClass().getResourceAsStream("/templates/templates/excel-template-employee.xlsx"));
 		Workbook wb = WorkbookFactory.create(fis);
 
 		Workbook workbook = wb;
