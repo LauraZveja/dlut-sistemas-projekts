@@ -173,161 +173,152 @@ public class ExcelCreatorServiceImpl implements IExcelCreatorService {
 
     //funkcija darbinieka excel datnes izveidošanai
     @Override
-    public void createEmployeeExcel(String excelPath, int employeeId, int year, int month) throws Exception {
+    public Workbook createEmployeeExcel(int employeeId, int year, int month) throws Exception {
         Employee employee = employeeService.selectOneEmployeeById(employeeId);
 
         ArrayList<EmployeeAndHourDTO> list = tableExportService
                 .selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
 
-        FileInputStream fis = new FileInputStream(new File(
-                "C:\\Users\\elina\\eclipsePrakseI\\dlut\\src\\main\\resources\\templates\\excel-template-employee.xlsx"));
-        Workbook wb = WorkbookFactory.create(fis);
-
-        Workbook workbook = wb;
-
-        // Sheet sheet = workbook.createSheet(finSource.getTitle()+ ", "+ month + "/" +
-        // year);
-        Sheet sheet = workbook.getSheetAt(0);
-        workbook.setSheetName(workbook.getSheetIndex(sheet), (month + "." + year + "."));
-
-        int daysInMonth = list.get(0).getHoursInMonth().size();
-        String start = LocalDate.of(year, month, 1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy."));
-        String end = LocalDate.of(year, month, daysInMonth).format(DateTimeFormatter.ofPattern("dd.MM.yyyy."));
-        sheet.getRow(2).getCell(0).setCellValue("Periods, par kuru tiek rakstīts pārskats: " + start + " - " + end);
-        sheet.getRow(3).getCell(0).setCellValue("Darbinieka vārds, uzvārds: " + employee.getName() + " " + employee.getSurname());
+        try (InputStream fis = getClass().getResourceAsStream("/templates/excel-template-employee.xlsx")) {
+            Workbook workbook = WorkbookFactory.create(fis);
+            Sheet sheet = workbook.getSheetAt(0);
+            workbook.setSheetName(workbook.getSheetIndex(sheet), (month + "." + year + "."));
 
 
-        sheet.getRow(7).getCell(3); //saakot no sii dienu cipari
+            int daysInMonth = list.get(0).getHoursInMonth().size();
+            String start = LocalDate.of(year, month, 1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy."));
+            String end = LocalDate.of(year, month, daysInMonth).format(DateTimeFormatter.ofPattern("dd.MM.yyyy."));
+            sheet.getRow(2).getCell(0).setCellValue("Periods, par kuru tiek rakstīts pārskats: " + start + " - " + end);
+            sheet.getRow(3).getCell(0).setCellValue("Darbinieka vārds, uzvārds: " + employee.getName() + " " + employee.getSurname());
 
-        sheet.addMergedRegion(new CellRangeAddress(5, 5, 3, daysInMonth + 2));
-        sheet.getRow(5).getCell(3).setCellValue("Mēneša dienas");
 
-        CellStyle cellStyleCenter = wb.createCellStyle();
-        cellStyleCenter.setAlignment(HorizontalAlignment.CENTER);
-        cellStyleCenter.setVerticalAlignment(VerticalAlignment.BOTTOM);
+            sheet.getRow(7).getCell(3); //saakot no sii dienu cipari
 
-        sheet.getRow(5).getCell(3).setCellStyle(cellStyleCenter);
+            sheet.addMergedRegion(new CellRangeAddress(5, 5, 3, daysInMonth + 2));
+            sheet.getRow(5).getCell(3).setCellValue("Mēneša dienas");
 
-        Row header = sheet.getRow(8);
+            CellStyle cellStyleCenter = workbook.createCellStyle();
+            cellStyleCenter.setAlignment(HorizontalAlignment.CENTER);
+            cellStyleCenter.setVerticalAlignment(VerticalAlignment.BOTTOM);
 
-        Map<Integer, String> map = list.get(0).getHoursInMonth();
+            sheet.getRow(5).getCell(3).setCellStyle(cellStyleCenter);
 
-        int number = 1;
-        for (int j = 3; j <= daysInMonth + 2; j++) {
-            if (map.get(number) == "BR")
-                sheet.getRow(6).getCell(j).setCellValue("Brīvdiena");
-            if (map.get(number) == "SV")
-                sheet.getRow(6).getCell(j).setCellValue("Svētki");
+            Row header = sheet.getRow(8);
 
-            sheet.getRow(7).getCell(j).setCellValue(number++);
+            Map<Integer, String> map = list.get(0).getHoursInMonth();
 
-        }
+            int number = 1;
+            for (int j = 3; j <= daysInMonth + 2; j++) {
+                if (map.get(number) == "BR")
+                    sheet.getRow(6).getCell(j).setCellValue("Brīvdiena");
+                if (map.get(number) == "SV")
+                    sheet.getRow(6).getCell(j).setCellValue("Svētki");
 
-        int rowNum = 8;
+                sheet.getRow(7).getCell(j).setCellValue(number++);
 
-        for (int i = 0; i < list.size(); i++) {
-            //Row row = sheet.createRow(rowNum++);
-            Row row = sheet.createRow(rowNum);
-            row.createCell(0).setCellValue(i + 1);
-            row.createCell(1).setCellValue(list.get(i).getFinanceSourceCode() + ", " + list.get(i).getFinanceSourceTitle());
-            row.createCell(2).setCellValue(list.get(i).getPosition());
-
-            Map<Integer, String> mapSpec = list.get(i).getHoursInMonth();
-
-            int k = 3; //cell number
-            for (Map.Entry<Integer, String> e : mapSpec.entrySet()) {
-                //row.createCell(k++).setCellValue(e.getValue());
-                Cell cell = row.createCell(k++);
-                cell.setCellValue(e.getValue());
-                CellStyle styleGreen = wb.createCellStyle();
-                styleGreen.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
-                styleGreen.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-                cell.setCellStyle(styleGreen);
             }
 
-            CellStyle styleYellow = wb.createCellStyle();
-            styleYellow.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
-            styleYellow.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            int rowNum = 8;
 
+            for (int i = 0; i < list.size(); i++) {
+                //Row row = sheet.createRow(rowNum++);
+                Row row = sheet.createRow(rowNum);
+                row.createCell(0).setCellValue(i + 1);
+                row.createCell(1).setCellValue(list.get(i).getFinanceSourceCode() + ", " + list.get(i).getFinanceSourceTitle());
+                row.createCell(2).setCellValue(list.get(i).getPosition());
 
-            row.createCell(36).setCellValue(list.get(i).sumHours());
-            row.getCell(36).setCellStyle(styleYellow);
-            row.createCell(37).setCellValue(list.get(i).daysWorkedAccordingToHours());
-            row.getCell(37).setCellStyle(styleYellow);
-            row.createCell(38).setCellValue(list.get(i).getSickDaysS());
-            row.getCell(38).setCellStyle(styleYellow);
-            row.createCell(39).setCellValue(list.get(i).getSickDaysSb());
-            row.getCell(39).setCellStyle(styleYellow);
-            row.createCell(40).setCellValue(list.get(i).getVacationAnnualDays());
-            row.getCell(40).setCellStyle(styleYellow);
-            row.createCell(41).setCellValue(list.get(i).getUnpaidVacation());
-            row.getCell(41).setCellStyle(styleYellow);
-            row.createCell(42).setCellValue(list.get(i).getParentalLeave());
-            row.getCell(42).setCellStyle(styleYellow);
-            row.createCell(43).setCellValue(list.get(i).getVacationEducation());
-            row.getCell(43).setCellStyle(styleYellow);
-            row.createCell(44).setCellValue(list.get(i).getVacationExtra());
-            row.getCell(44).setCellStyle(styleYellow);
-            row.createCell(45).setCellValue(list.get(i).getVacationCreative());
-            row.getCell(45).setCellStyle(styleYellow);
-            row.createCell(46).setCellValue(list.get(i).getVoluntaryWork());
-            row.getCell(46).setCellStyle(styleYellow);
-            row.createCell(47).setCellValue(list.get(i).getMissionWorkDays());
-            row.getCell(47).setCellStyle(styleYellow);
-            row.createCell(48).setCellValue(list.get(i).getMissionEducationDays());
-            row.getCell(48).setCellStyle(styleYellow);
-            row.createCell(49).setCellValue(list.get(i).getUnjustifiedAbsence());
-            row.getCell(49).setCellStyle(styleYellow);
+                Map<Integer, String> mapSpec = list.get(i).getHoursInMonth();
 
-            if (list.get(i).getProjectCharacter() != null) {
-                rowNum += 1;
-                Row rowForCharacter = sheet.createRow(rowNum);
-                rowForCharacter.createCell(1).setCellValue(list.get(i).getProjectCharacter());
-//				
-                int j = 3; //cell number
+                int k = 3; //cell number
                 for (Map.Entry<Integer, String> e : mapSpec.entrySet()) {
                     //row.createCell(k++).setCellValue(e.getValue());
-                    Cell cell = rowForCharacter.createCell(j++);
+                    Cell cell = row.createCell(k++);
                     cell.setCellValue(e.getValue());
+                    CellStyle styleGreen = workbook.createCellStyle();
+                    styleGreen.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+                    styleGreen.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                    cell.setCellStyle(styleGreen);
                 }
-                rowForCharacter.createCell(36).setCellValue(list.get(i).sumHours());
 
-                rowForCharacter.createCell(37).setCellValue(list.get(i).daysWorkedAccordingToHours());
-                rowForCharacter.createCell(38).setCellValue(0);
-                rowForCharacter.createCell(39).setCellValue(0);
-                rowForCharacter.createCell(40).setCellValue(0);
-                rowForCharacter.createCell(41).setCellValue(0);
-                rowForCharacter.createCell(42).setCellValue(0);
-                rowForCharacter.createCell(43).setCellValue(0);
-                rowForCharacter.createCell(44).setCellValue(0);
-                rowForCharacter.createCell(45).setCellValue(0);
-                rowForCharacter.createCell(46).setCellValue(0);
-                rowForCharacter.createCell(47).setCellValue(0);
-                rowForCharacter.createCell(48).setCellValue(0);
-                rowForCharacter.createCell(49).setCellValue(0);
+                CellStyle styleYellow = workbook.createCellStyle();
+                styleYellow.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+                styleYellow.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+
+                row.createCell(36).setCellValue(list.get(i).sumHours());
+                row.getCell(36).setCellStyle(styleYellow);
+                row.createCell(37).setCellValue(list.get(i).daysWorkedAccordingToHours());
+                row.getCell(37).setCellStyle(styleYellow);
+                row.createCell(38).setCellValue(list.get(i).getSickDaysS());
+                row.getCell(38).setCellStyle(styleYellow);
+                row.createCell(39).setCellValue(list.get(i).getSickDaysSb());
+                row.getCell(39).setCellStyle(styleYellow);
+                row.createCell(40).setCellValue(list.get(i).getVacationAnnualDays());
+                row.getCell(40).setCellStyle(styleYellow);
+                row.createCell(41).setCellValue(list.get(i).getUnpaidVacation());
+                row.getCell(41).setCellStyle(styleYellow);
+                row.createCell(42).setCellValue(list.get(i).getParentalLeave());
+                row.getCell(42).setCellStyle(styleYellow);
+                row.createCell(43).setCellValue(list.get(i).getVacationEducation());
+                row.getCell(43).setCellStyle(styleYellow);
+                row.createCell(44).setCellValue(list.get(i).getVacationExtra());
+                row.getCell(44).setCellStyle(styleYellow);
+                row.createCell(45).setCellValue(list.get(i).getVacationCreative());
+                row.getCell(45).setCellStyle(styleYellow);
+                row.createCell(46).setCellValue(list.get(i).getVoluntaryWork());
+                row.getCell(46).setCellStyle(styleYellow);
+                row.createCell(47).setCellValue(list.get(i).getMissionWorkDays());
+                row.getCell(47).setCellStyle(styleYellow);
+                row.createCell(48).setCellValue(list.get(i).getMissionEducationDays());
+                row.getCell(48).setCellStyle(styleYellow);
+                row.createCell(49).setCellValue(list.get(i).getUnjustifiedAbsence());
+                row.getCell(49).setCellStyle(styleYellow);
+
+                if (list.get(i).getProjectCharacter() != null) {
+                    rowNum += 1;
+                    Row rowForCharacter = sheet.createRow(rowNum);
+                    rowForCharacter.createCell(1).setCellValue(list.get(i).getProjectCharacter());
+//				
+                    int j = 3; //cell number
+                    for (Map.Entry<Integer, String> e : mapSpec.entrySet()) {
+                        //row.createCell(k++).setCellValue(e.getValue());
+                        Cell cell = rowForCharacter.createCell(j++);
+                        cell.setCellValue(e.getValue());
+                    }
+                    rowForCharacter.createCell(36).setCellValue(list.get(i).sumHours());
+
+                    rowForCharacter.createCell(37).setCellValue(list.get(i).daysWorkedAccordingToHours());
+                    rowForCharacter.createCell(38).setCellValue(0);
+                    rowForCharacter.createCell(39).setCellValue(0);
+                    rowForCharacter.createCell(40).setCellValue(0);
+                    rowForCharacter.createCell(41).setCellValue(0);
+                    rowForCharacter.createCell(42).setCellValue(0);
+                    rowForCharacter.createCell(43).setCellValue(0);
+                    rowForCharacter.createCell(44).setCellValue(0);
+                    rowForCharacter.createCell(45).setCellValue(0);
+                    rowForCharacter.createCell(46).setCellValue(0);
+                    rowForCharacter.createCell(47).setCellValue(0);
+                    rowForCharacter.createCell(48).setCellValue(0);
+                    rowForCharacter.createCell(49).setCellValue(0);
+
+                }
+                rowNum++;
+            }
+            sheet.createRow(rowNum).createCell(2).setCellValue("KOPĀ");
+            Map<Integer, Double> mapRes = tableExportService.allHoursOneEmployeeOnDate(year, month, employeeId);
+            int n = 3; //cell number
+            for (Map.Entry<Integer, Double> entry : mapRes.entrySet()) {
+                //row.createCell(k++).setCellValue(e.getValue());
+                Cell cell = sheet.getRow(rowNum).createCell(n++);
+                cell.setCellValue(entry.getValue());
 
             }
-            rowNum++;
-        }
-        sheet.createRow(rowNum).createCell(2).setCellValue("KOPĀ");
-        Map<Integer, Double> mapRes = tableExportService.allHoursOneEmployeeOnDate(year, month, employeeId);
-        int n = 3; //cell number
-        for (Map.Entry<Integer, Double> entry : mapRes.entrySet()) {
-            //row.createCell(k++).setCellValue(e.getValue());
-            Cell cell = sheet.getRow(rowNum).createCell(n++);
-            cell.setCellValue(entry.getValue());
-
-        }
-        double allHWorked = tableExportService.sumAllHoursWorked(mapRes);
-        sheet.getRow(rowNum).createCell(36).setCellValue(allHWorked);
+            double allHWorked = tableExportService.sumAllHoursWorked(mapRes);
+            sheet.getRow(rowNum).createCell(36).setCellValue(allHWorked);
 
 
-        try {
-            workbook.write(new FileOutputStream(excelPath));
-            workbook.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            return workbook;
+
         }
 
     }
