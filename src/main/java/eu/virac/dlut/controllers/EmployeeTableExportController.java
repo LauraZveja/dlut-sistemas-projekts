@@ -7,12 +7,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-
-import eu.virac.dlut.models.helpers.EmployeeDTO;
-import eu.virac.dlut.models.helpers.YearMonthEmployeeSelectionDTO;
+import eu.virac.dlut.models.helpers.*;
 import jakarta.validation.Valid;
 import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,8 +25,6 @@ import eu.virac.dlut.models.FinanceOrderWork;
 import eu.virac.dlut.models.FinanceSource;
 import eu.virac.dlut.models.FullTimeEquivalent;
 import eu.virac.dlut.models.HoursInMonth;
-import eu.virac.dlut.models.helpers.EmployeeAndHourDTO;
-import eu.virac.dlut.models.helpers.TableResultEditingDTO;
 import eu.virac.dlut.repos.IEmployeeRepo;
 import eu.virac.dlut.repos.IFinanceOrderWorkRepo;
 import eu.virac.dlut.services.IEmployeeService;
@@ -39,331 +36,285 @@ import eu.virac.dlut.services.ITableExportService;
 @Controller
 public class EmployeeTableExportController {
 
-	@Autowired
-	ITableExportService tableExportService;
+    @Autowired
+    ITableExportService tableExportService;
 
-	@Autowired
-	IEmployeeTimeSheetService emplTimeSheetService;
+    @Autowired
+    IEmployeeTimeSheetService emplTimeSheetService;
 
-	@Autowired
-	IEmployeeService employeeService;
-	
-	@Autowired
-	IHoursInMonthService hoursInMonthService;
-	
-	@Autowired
-	IFinanceOrderWorkRepo financeOrderWorkRepo;
-	
-	@Autowired
-	IFullTimeEquivalentService fullTimeEquivalentService;
-	
-	@Autowired
-	IEmployeeRepo employeeRepo;
-	
-	@GetMapping("dlut/tabele/eksportet/darbinieks/izvele")
-	public ResponseEntity<YearMonthEmployeeSelectionDTO> getTableExport() {
+    @Autowired
+    IEmployeeService employeeService;
 
-		ArrayList<String> yearOptions = emplTimeSheetService.selectYearsFromTimeSheets();
-		List<String> monthOptions = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
-		List<EmployeeDTO> employeeDTOs = employeeService.selectAllEmployees()
-				.stream()
-				.map(employee -> new EmployeeDTO(employee.getName(), employee.getSurname()))
-				.collect(Collectors.toList());
+    @Autowired
+    IHoursInMonthService hoursInMonthService;
 
-		YearMonthEmployeeSelectionDTO yearMonthEmployeeSelectionDTO = new YearMonthEmployeeSelectionDTO(yearOptions, monthOptions, employeeDTOs);
-		//iespējams modeļu klasēs nāksies izmantot @JsonIgnore, lai neaiziet rekursijā
-		//return ResponseEntity.ok(yearMonthEmployeeSelectionDTO);
-		return new ResponseEntity<YearMonthEmployeeSelectionDTO>(yearMonthEmployeeSelectionDTO, HttpStatusCode.valueOf(200));
-	}
+    @Autowired
+    IFinanceOrderWorkRepo financeOrderWorkRepo;
 
-	@PostMapping("dlut/tabele/eksportet/darbinieks/izvele")
-	public ResponseEntity<YearMonthEmployeeSelectionDTO> postTableExport(@Valid @RequestBody YearMonthEmployeeSelectionDTO yearMonthEmployeeSelectionDTO, BindingResult result) {
-		if (result.hasErrors()) {
-			return ResponseEntity.badRequest().body(yearMonthEmployeeSelectionDTO);
-		}
+    @Autowired
+    IFullTimeEquivalentService fullTimeEquivalentService;
 
-		return ResponseEntity.ok(yearMonthEmployeeSelectionDTO);
-	}
+    @Autowired
+    IEmployeeRepo employeeRepo;
 
-	@GetMapping("dlut/tabele/eksportet/darbinieks/{year}/{month}/{idempl}")
-	public String getFinanceSourceTableExportResults(@PathVariable("year") int year, @PathVariable("month") int month,
-			@PathVariable("idempl") int employeeId, Model model) {
+    @GetMapping("dlut/tabele/eksportet/darbinieks/izvele")
+    public ResponseEntity<YearMonthEmployeeSelectionDTO> getTableExport() {
 
-		double workHoursThisMonth = 0.0;
-		try {
-			HoursInMonth h = hoursInMonthService.selectHoursInMonthByYearAndMonth(year, month);
-			workHoursThisMonth = h.getHoursInMonth();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+        ArrayList<String> yearOptions = emplTimeSheetService.selectYearsFromTimeSheets();
+        List<String> monthOptions = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12");
+        List<EmployeeDTO> employeeDTOs = employeeService.selectAllEmployees()
+                .stream()
+                .map(employee -> new EmployeeDTO(employee.getName(), employee.getSurname()))
+                .collect(Collectors.toList());
 
-		// mēneša attēlojumam virsrakstā
-		Map<Integer, String> monthNumberAndName = new HashedMap<>();
-		monthNumberAndName.put(1, "janvāris");
-		monthNumberAndName.put(2, "februāris");
-		monthNumberAndName.put(3, "marts");
-		monthNumberAndName.put(4, "aprīlis");
-		monthNumberAndName.put(5, "maijs");
-		monthNumberAndName.put(6, "jūnijs");
-		monthNumberAndName.put(7, "jūlijs");
-		monthNumberAndName.put(8, "augusts");
-		monthNumberAndName.put(9, "septembris");
-		monthNumberAndName.put(10, "oktobris");
-		monthNumberAndName.put(11, "novembris");
-		monthNumberAndName.put(12, "decembris");
+        YearMonthEmployeeSelectionDTO yearMonthEmployeeSelectionDTO = new YearMonthEmployeeSelectionDTO(yearOptions, monthOptions, employeeDTOs);
+        //iespējams modeļu klasēs nāksies izmantot @JsonIgnore, lai neaiziet rekursijā
+        return new ResponseEntity<YearMonthEmployeeSelectionDTO>(yearMonthEmployeeSelectionDTO, HttpStatusCode.valueOf(200));
+    }
 
-		try {
-			Employee employee = employeeService.selectOneEmployeeById(employeeId);
+    @PostMapping("dlut/tabele/eksportet/darbinieks/izvele")
+    public ResponseEntity<YearMonthEmployeeSelectionDTO> postTableExport(@Valid @RequestBody YearMonthEmployeeSelectionDTO yearMonthEmployeeSelectionDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest().body(yearMonthEmployeeSelectionDTO);
+        }
 
-			// ArrayList<EmployeeAndHourDTO> list =
-			// tableExportService.selectOneEmployeeAndAllProjects(employee, year, month);
-			ArrayList<EmployeeAndHourDTO> list = tableExportService
-					.selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
-//			ArrayList<EmployeeAndHourDTO> listPr = tableExportService.selectDataEmployeeInProjectsInMonthAndYear(year,
-//					month, employeeId);
-			Map<Integer, Double> hoursResult = tableExportService.allHoursOneEmployeeOnDate(year, month, employeeId);
+        return new ResponseEntity<YearMonthEmployeeSelectionDTO>(yearMonthEmployeeSelectionDTO, HttpStatusCode.valueOf(200));
+    }
 
-			boolean areSDaysAllZero = tableExportService.areSickDaysSZero(list);
-			boolean areSbAllZero = tableExportService.areSickSbZero(list);
-			boolean countAnnualVacAI = tableExportService.areAnnualVacationAIZero(list);
-			boolean unpaidVacationCountAB = tableExportService.areUnpaidVacationZero(list);
-			boolean parentalLeaveAA = tableExportService.areParentalLeaveDaysZero(list);
-			boolean educationVacationAMZero = tableExportService.areVacationEducationDaysForAllZero(list);
-			boolean areExtraVacationAPZero = tableExportService.areExtraVacationDaysAllZero(list);
-			boolean areCreatveVacationARDaysZero = tableExportService.areCreativeVacationDaysForAllZero(list);
-			boolean areVoluntaryWorkBDAllZero = tableExportService.areVolunatryWorkAllDaysZero(list);
-			boolean areMissionWorkAllDaysZero = tableExportService.areWorkMissionDaysZero(list);
-			boolean areEducationWorkDaysAllZero = tableExportService.areDaysOfMissionEducationZero(list);
-			
-			double allHoursWorked = tableExportService.sumAllHoursWorked(hoursResult);
+    @GetMapping("dlut/tabele/eksportet/darbinieks/{year}/{month}/{idempl}")
+    public ResponseEntity<?> getFinanceSourceTableExportResults(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("idempl") int employeeId) {
 
-			if ((list.size() > 0)) {
+        Map<Integer, String> monthNumberAndName = new HashedMap<>();
+        // mēneša attēlojumam virsrakstā
+        monthNumberAndName.put(1, "janvāris");
+        monthNumberAndName.put(2, "februāris");
+        monthNumberAndName.put(3, "marts");
+        monthNumberAndName.put(4, "aprīlis");
+        monthNumberAndName.put(5, "maijs");
+        monthNumberAndName.put(6, "jūnijs");
+        monthNumberAndName.put(7, "jūlijs");
+        monthNumberAndName.put(8, "augusts");
+        monthNumberAndName.put(9, "septembris");
+        monthNumberAndName.put(10, "oktobris");
+        monthNumberAndName.put(11, "novembris");
+        monthNumberAndName.put(12, "decembris");
 
-				model.addAttribute("empl", employee);
-				model.addAttribute("list", list);
-				model.addAttribute("year", year);
-				model.addAttribute("month", monthNumberAndName.get(month));
-				model.addAttribute("monthNumber", month);
-				model.addAttribute("workHoursInMonth", workHoursThisMonth);
-				model.addAttribute("hoursRes", hoursResult);
-				if (areSDaysAllZero == false)
-					model.addAttribute("s", areSDaysAllZero);
+        try {
 
-				if (areSbAllZero == false)
-					model.addAttribute("sb", areSbAllZero);
+            HoursInMonth hoursInMonth = hoursInMonthService.selectHoursInMonthByYearAndMonth(year, month);
+            double workHoursThisMonth = (hoursInMonth != null) ? hoursInMonth.getHoursInMonth() : 0.0;
 
-				if (countAnnualVacAI == false)
-					model.addAttribute("ai", countAnnualVacAI);
+            List<EmployeeAndHourDTO> employeeHoursList = tableExportService.selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
+            if (employeeHoursList.isEmpty()) {
+                return ResponseEntity.noContent().build(); // No content found
+            }
+            Employee employee = employeeService.selectOneEmployeeById(employeeId);
+            EmployeeDTO employeeDTO = new EmployeeDTO(employee.getName(), employee.getSurname());
 
-				if (unpaidVacationCountAB == false)
-					model.addAttribute("ab", unpaidVacationCountAB);
+            ArrayList<EmployeeAndHourDTO> list = tableExportService
+                    .selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
 
-				if (parentalLeaveAA == false)
-					model.addAttribute("aa", parentalLeaveAA);
+            Map<Integer, Double> hoursResult = tableExportService.allHoursOneEmployeeOnDate(year, month, employeeId);
 
-				if (educationVacationAMZero == false)
-					model.addAttribute("am", educationVacationAMZero);
+            EmployeeSummaryResponseDTO responseDTO = new EmployeeSummaryResponseDTO(
+                    employeeDTO,
+                    new ArrayList<>(employeeHoursList),
+                    workHoursThisMonth,
+                    monthNumberAndName,
+                    tableExportService.areSickDaysSZero(list),
+                    tableExportService.areSickSbZero(list),
+                    tableExportService.areAnnualVacationAIZero(list),
+                    tableExportService.areUnpaidVacationZero(list),
+                    tableExportService.areParentalLeaveDaysZero(list),
+                    tableExportService.areVacationEducationDaysForAllZero(list),
+                    tableExportService.areExtraVacationDaysAllZero(list),
+                    tableExportService.areCreativeVacationDaysForAllZero(list),
+                    tableExportService.areVolunatryWorkAllDaysZero(list),
+                    tableExportService.areWorkMissionDaysZero(list),
+                    tableExportService.areDaysOfMissionEducationZero(list),
+                    tableExportService.sumAllHoursWorked(hoursResult)
+            );
 
-				if (areExtraVacationAPZero == false)
-					model.addAttribute("ap", areExtraVacationAPZero);
+            return new ResponseEntity<>(responseDTO, HttpStatusCode.valueOf(200));
 
-				if (areCreatveVacationARDaysZero == false)
-					model.addAttribute("ar", areCreatveVacationARDaysZero);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error generating results: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-				if (areVoluntaryWorkBDAllZero == false)
-					model.addAttribute("bd", areVoluntaryWorkBDAllZero);
+    }
 
-				if (areMissionWorkAllDaysZero == false)
-					model.addAttribute("kd", areMissionWorkAllDaysZero);
 
-				if (areEducationWorkDaysAllZero == false)
-					model.addAttribute("km", areEducationWorkDaysAllZero);
-				
-				model.addAttribute("allHWorked", allHoursWorked);
-				
+    //rediģēšanai
+    @GetMapping("dlut/tabele/rediget/darbinieks/{year}/{month}/{idempl}")
+    public String getEmployeeTableExportResultsForEditing(@PathVariable("year") int year, @PathVariable("month") int month,
+                                                          @PathVariable("idempl") int employeeId, Model model) {
 
-				return "table-export-employee-results";
-			} else {
-				return "no-results";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "no-results";
-		}
-	}
-	
-//rediģēšanai
-	@GetMapping("dlut/tabele/rediget/darbinieks/{year}/{month}/{idempl}")
-	public String getEmployeeTableExportResultsForEditing(@PathVariable("year") int year, @PathVariable("month") int month,
-			@PathVariable("idempl") int employeeId, Model model) {
+        List<EmployeeAndHourDTO> results = new ArrayList<>();
 
-		List<EmployeeAndHourDTO> results = new ArrayList<>();
-		
-		double workHoursThisMonth = 0.0;
-		try {
-			HoursInMonth h = hoursInMonthService.selectHoursInMonthByYearAndMonth(year, month);
-			workHoursThisMonth = h.getHoursInMonth();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+        double workHoursThisMonth = 0.0;
+        try {
+            HoursInMonth h = hoursInMonthService.selectHoursInMonthByYearAndMonth(year, month);
+            workHoursThisMonth = h.getHoursInMonth();
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
 
-		// mēneša attēlojumam virsrakstā
-		Map<Integer, String> monthNumberAndName = new HashedMap<>();
-		monthNumberAndName.put(1, "janvāris");
-		monthNumberAndName.put(2, "februāris");
-		monthNumberAndName.put(3, "marts");
-		monthNumberAndName.put(4, "aprīlis");
-		monthNumberAndName.put(5, "maijs");
-		monthNumberAndName.put(6, "jūnijs");
-		monthNumberAndName.put(7, "jūlijs");
-		monthNumberAndName.put(8, "augusts");
-		monthNumberAndName.put(9, "septembris");
-		monthNumberAndName.put(10, "oktobris");
-		monthNumberAndName.put(11, "novembris");
-		monthNumberAndName.put(12, "decembris");
+        // mēneša attēlojumam virsrakstā
+        Map<Integer, String> monthNumberAndName = new HashedMap<>();
+        monthNumberAndName.put(1, "janvāris");
+        monthNumberAndName.put(2, "februāris");
+        monthNumberAndName.put(3, "marts");
+        monthNumberAndName.put(4, "aprīlis");
+        monthNumberAndName.put(5, "maijs");
+        monthNumberAndName.put(6, "jūnijs");
+        monthNumberAndName.put(7, "jūlijs");
+        monthNumberAndName.put(8, "augusts");
+        monthNumberAndName.put(9, "septembris");
+        monthNumberAndName.put(10, "oktobris");
+        monthNumberAndName.put(11, "novembris");
+        monthNumberAndName.put(12, "decembris");
 
-		try {
-			Employee employee = employeeService.selectOneEmployeeById(employeeId);
+        try {
+            Employee employee = employeeService.selectOneEmployeeById(employeeId);
 
-		
-			ArrayList<EmployeeAndHourDTO> list = tableExportService
-					.selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
-			
-			for(EmployeeAndHourDTO temp: list) {
-				results.add(temp);
-			}
-			Map<Integer, Double> hoursResult = tableExportService.allHoursOneEmployeeOnDate(year, month, employeeId);
 
-			
-			boolean areSDaysAllZero = tableExportService.areSickDaysSZero(list);
-			boolean areSbAllZero = tableExportService.areSickSbZero(list);
-			boolean countAnnualVacAI = tableExportService.areAnnualVacationAIZero(list);
-			boolean unpaidVacationCountAB = tableExportService.areUnpaidVacationZero(list);
-			boolean parentalLeaveAA = tableExportService.areParentalLeaveDaysZero(list);
-			boolean educationVacationAMZero = tableExportService.areVacationEducationDaysForAllZero(list);
-			boolean areExtraVacationAPZero = tableExportService.areExtraVacationDaysAllZero(list);
-			boolean areCreatveVacationARDaysZero = tableExportService.areCreativeVacationDaysForAllZero(list);
-			boolean areVoluntaryWorkBDAllZero = tableExportService.areVolunatryWorkAllDaysZero(list);
-			boolean areMissionWorkAllDaysZero = tableExportService.areWorkMissionDaysZero(list);
-			boolean areEducationWorkDaysAllZero = tableExportService.areDaysOfMissionEducationZero(list);
-			
-			double allHoursWorked = tableExportService.sumAllHoursWorked(hoursResult);
+            ArrayList<EmployeeAndHourDTO> list = tableExportService
+                    .selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
 
-			if ((list.size() > 0)) {
+            for (EmployeeAndHourDTO temp : list) {
+                results.add(temp);
+            }
+            Map<Integer, Double> hoursResult = tableExportService.allHoursOneEmployeeOnDate(year, month, employeeId);
 
-				model.addAttribute("empl", employee);
-				model.addAttribute("list", list);
-				model.addAttribute("year", year);
-				model.addAttribute("month", monthNumberAndName.get(month));
-				model.addAttribute("monthNumber", month);
-				model.addAttribute("workHoursInMonth", workHoursThisMonth);
-				model.addAttribute("hoursRes", hoursResult);
-				
-				model.addAttribute("form", new TableResultEditingDTO(results));
-				
-				if (areSDaysAllZero == false)
-					model.addAttribute("s", areSDaysAllZero);
 
-				if (areSbAllZero == false)
-					model.addAttribute("sb", areSbAllZero);
+            boolean areSDaysAllZero = tableExportService.areSickDaysSZero(list);
+            boolean areSbAllZero = tableExportService.areSickSbZero(list);
+            boolean countAnnualVacAI = tableExportService.areAnnualVacationAIZero(list);
+            boolean unpaidVacationCountAB = tableExportService.areUnpaidVacationZero(list);
+            boolean parentalLeaveAA = tableExportService.areParentalLeaveDaysZero(list);
+            boolean educationVacationAMZero = tableExportService.areVacationEducationDaysForAllZero(list);
+            boolean areExtraVacationAPZero = tableExportService.areExtraVacationDaysAllZero(list);
+            boolean areCreatveVacationARDaysZero = tableExportService.areCreativeVacationDaysForAllZero(list);
+            boolean areVoluntaryWorkBDAllZero = tableExportService.areVolunatryWorkAllDaysZero(list);
+            boolean areMissionWorkAllDaysZero = tableExportService.areWorkMissionDaysZero(list);
+            boolean areEducationWorkDaysAllZero = tableExportService.areDaysOfMissionEducationZero(list);
 
-				if (countAnnualVacAI == false)
-					model.addAttribute("ai", countAnnualVacAI);
+            double allHoursWorked = tableExportService.sumAllHoursWorked(hoursResult);
 
-				if (unpaidVacationCountAB == false)
-					model.addAttribute("ab", unpaidVacationCountAB);
+            if ((list.size() > 0)) {
 
-				if (parentalLeaveAA == false)
-					model.addAttribute("aa", parentalLeaveAA);
+                model.addAttribute("empl", employee);
+                model.addAttribute("list", list);
+                model.addAttribute("year", year);
+                model.addAttribute("month", monthNumberAndName.get(month));
+                model.addAttribute("monthNumber", month);
+                model.addAttribute("workHoursInMonth", workHoursThisMonth);
+                model.addAttribute("hoursRes", hoursResult);
 
-				if (educationVacationAMZero == false)
-					model.addAttribute("am", educationVacationAMZero);
+                model.addAttribute("form", new TableResultEditingDTO(results));
 
-				if (areExtraVacationAPZero == false)
-					model.addAttribute("ap", areExtraVacationAPZero);
+                if (areSDaysAllZero == false)
+                    model.addAttribute("s", areSDaysAllZero);
 
-				if (areCreatveVacationARDaysZero == false)
-					model.addAttribute("ar", areCreatveVacationARDaysZero);
+                if (areSbAllZero == false)
+                    model.addAttribute("sb", areSbAllZero);
 
-				if (areVoluntaryWorkBDAllZero == false)
-					model.addAttribute("bd", areVoluntaryWorkBDAllZero);
+                if (countAnnualVacAI == false)
+                    model.addAttribute("ai", countAnnualVacAI);
 
-				if (areMissionWorkAllDaysZero == false)
-					model.addAttribute("kd", areMissionWorkAllDaysZero);
+                if (unpaidVacationCountAB == false)
+                    model.addAttribute("ab", unpaidVacationCountAB);
 
-				if (areEducationWorkDaysAllZero == false)
-					model.addAttribute("km", areEducationWorkDaysAllZero);
-				
-				model.addAttribute("allHWorked", allHoursWorked);
-				
+                if (parentalLeaveAA == false)
+                    model.addAttribute("aa", parentalLeaveAA);
 
-				return "table-edit-employee";
-			} else {
-				return "no-results";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "no-results";
-		}
-	}
+                if (educationVacationAMZero == false)
+                    model.addAttribute("am", educationVacationAMZero);
 
-	@PostMapping("dlut/tabele/rediget/darbinieks/{year}/{month}/{idempl}")
-	public String postEmployeeTableExportResultsForEditing(@PathVariable("year") int year,
-			@PathVariable("month") int month, @PathVariable("idempl") int employeeId,
-			@ModelAttribute TableResultEditingDTO form) {
+                if (areExtraVacationAPZero == false)
+                    model.addAttribute("ap", areExtraVacationAPZero);
 
-		try {
-			ArrayList<EmployeeAndHourDTO> oldList = tableExportService
-					.selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
+                if (areCreatveVacationARDaysZero == false)
+                    model.addAttribute("ar", areCreatveVacationARDaysZero);
 
-			for (EmployeeAndHourDTO temp : form.getResults()) {
-				for (EmployeeAndHourDTO oldTemp : oldList) {
+                if (areVoluntaryWorkBDAllZero == false)
+                    model.addAttribute("bd", areVoluntaryWorkBDAllZero);
 
-					if (temp.getFinanceSourceId() == oldTemp.getFinanceSourceId()) {
+                if (areMissionWorkAllDaysZero == false)
+                    model.addAttribute("kd", areMissionWorkAllDaysZero);
 
-						Map<Integer, String> mapSpec = temp.getHoursInMonth();
-						Map<Integer, String> oldMap = oldTemp.getHoursInMonth();
+                if (areEducationWorkDaysAllZero == false)
+                    model.addAttribute("km", areEducationWorkDaysAllZero);
 
-						for (Map.Entry<Integer, String> e : mapSpec.entrySet()) {
-							for (Map.Entry<Integer, String> oldE : oldMap.entrySet()) {
+                model.addAttribute("allHWorked", allHoursWorked);
 
-								if (e.getKey().equals(oldE.getKey())) {
-									if (!e.getValue().equals(oldE.getValue())) {
 
-										double hoursDouble = Double.parseDouble(e.getValue());
+                return "table-edit-employee";
+            } else {
+                return "no-results";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "no-results";
+        }
+    }
 
-										if ((oldE.getValue().contentEquals("0"))
-												|| (oldE.getValue().contentEquals("BR"))) {
-											emplTimeSheetService.saveNewFromEditEmployeeTable(year, month, e.getKey(),
-													employeeId, temp.getFinanceSourceId(), hoursDouble,
-													temp.getPosition());
-											System.out.println(temp.getPosition());
-											System.out.println(hoursDouble);
-										} else
-											emplTimeSheetService.updateEntry(year, month, e.getKey(), employeeId,
-													temp.getFinanceSourceId(), hoursDouble);
-									}
-								}
+    @PostMapping("dlut/tabele/rediget/darbinieks/{year}/{month}/{idempl}")
+    public String postEmployeeTableExportResultsForEditing(@PathVariable("year") int year,
+                                                           @PathVariable("month") int month, @PathVariable("idempl") int employeeId,
+                                                           @ModelAttribute TableResultEditingDTO form) {
 
-							}
-						}
-						if (temp.getVacationHours() != oldTemp.getVacationHours()) {
+        try {
+            ArrayList<EmployeeAndHourDTO> oldList = tableExportService
+                    .selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
 
-							fullTimeEquivalentService.updateVacationHoursByYearMonthFinSourceEmployeeFromEditEmployee(
-									year, month, employeeId, temp.getFinanceSourceId(), temp.getVacationHours());
-						}
-					}
-				}
-			}
+            for (EmployeeAndHourDTO temp : form.getResults()) {
+                for (EmployeeAndHourDTO oldTemp : oldList) {
 
-			return "redirect:/dlut/tabele/eksportet/darbinieks/" + year + "/" + month + "/" + employeeId;
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return "no-results";
-		}
-	}
+                    if (temp.getFinanceSourceId() == oldTemp.getFinanceSourceId()) {
+
+                        Map<Integer, String> mapSpec = temp.getHoursInMonth();
+                        Map<Integer, String> oldMap = oldTemp.getHoursInMonth();
+
+                        for (Map.Entry<Integer, String> e : mapSpec.entrySet()) {
+                            for (Map.Entry<Integer, String> oldE : oldMap.entrySet()) {
+
+                                if (e.getKey().equals(oldE.getKey())) {
+                                    if (!e.getValue().equals(oldE.getValue())) {
+
+                                        double hoursDouble = Double.parseDouble(e.getValue());
+
+                                        if ((oldE.getValue().contentEquals("0"))
+                                                || (oldE.getValue().contentEquals("BR"))) {
+                                            emplTimeSheetService.saveNewFromEditEmployeeTable(year, month, e.getKey(),
+                                                    employeeId, temp.getFinanceSourceId(), hoursDouble,
+                                                    temp.getPosition());
+                                            System.out.println(temp.getPosition());
+                                            System.out.println(hoursDouble);
+                                        } else
+                                            emplTimeSheetService.updateEntry(year, month, e.getKey(), employeeId,
+                                                    temp.getFinanceSourceId(), hoursDouble);
+                                    }
+                                }
+
+                            }
+                        }
+                        if (temp.getVacationHours() != oldTemp.getVacationHours()) {
+
+                            fullTimeEquivalentService.updateVacationHoursByYearMonthFinSourceEmployeeFromEditEmployee(
+                                    year, month, employeeId, temp.getFinanceSourceId(), temp.getVacationHours());
+                        }
+                    }
+                }
+            }
+
+            return "redirect:/dlut/tabele/eksportet/darbinieks/" + year + "/" + month + "/" + employeeId;
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            return "no-results";
+        }
+    }
 
 }
