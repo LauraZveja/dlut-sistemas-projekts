@@ -146,20 +146,9 @@ public class EmployeeTableExportController {
 
     //rediģēšanai
     @GetMapping("dlut/tabele/rediget/darbinieks/{year}/{month}/{idempl}")
-    public String getEmployeeTableExportResultsForEditing(@PathVariable("year") int year, @PathVariable("month") int month,
-                                                          @PathVariable("idempl") int employeeId, Model model) {
+    public ResponseEntity<?> getEmployeeTableExportResultsForEditing(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("idempl") int employeeId) {
 
         List<EmployeeAndHourDTO> results = new ArrayList<>();
-
-        double workHoursThisMonth = 0.0;
-        try {
-            HoursInMonth h = hoursInMonthService.selectHoursInMonthByYearAndMonth(year, month);
-            workHoursThisMonth = h.getHoursInMonth();
-        } catch (Exception e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-
         // mēneša attēlojumam virsrakstā
         Map<Integer, String> monthNumberAndName = new HashedMap<>();
         monthNumberAndName.put(1, "janvāris");
@@ -175,88 +164,45 @@ public class EmployeeTableExportController {
         monthNumberAndName.put(11, "novembris");
         monthNumberAndName.put(12, "decembris");
 
+
         try {
-            Employee employee = employeeService.selectOneEmployeeById(employeeId);
+            HoursInMonth hoursInMonth = hoursInMonthService.selectHoursInMonthByYearAndMonth(year, month);
+            double workHoursThisMonth = (hoursInMonth != null) ? hoursInMonth.getHoursInMonth() : 0.0;
 
 
-            ArrayList<EmployeeAndHourDTO> list = tableExportService
-                    .selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
-
-            for (EmployeeAndHourDTO temp : list) {
-                results.add(temp);
+            ArrayList<EmployeeAndHourDTO> employeeHoursList = tableExportService.selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
+            if (employeeHoursList.isEmpty()) {
+                return ResponseEntity.noContent().build();
             }
+
+
+            Employee employee = employeeService.selectOneEmployeeById(employeeId);
+            EmployeeDTO employeeDTO = new EmployeeDTO(employee.getName(), employee.getSurname());
+
             Map<Integer, Double> hoursResult = tableExportService.allHoursOneEmployeeOnDate(year, month, employeeId);
 
+            EmployeeSummaryResponseDTO responseDTO = new EmployeeSummaryResponseDTO(
+                    employeeDTO,
+                    new ArrayList<>(employeeHoursList),
+                    workHoursThisMonth,
+                    monthNumberAndName,
+                    tableExportService.areSickDaysSZero(employeeHoursList),
+                    tableExportService.areSickSbZero(employeeHoursList),
+                    tableExportService.areAnnualVacationAIZero(employeeHoursList),
+                    tableExportService.areUnpaidVacationZero(employeeHoursList),
+                    tableExportService.areParentalLeaveDaysZero(employeeHoursList),
+                    tableExportService.areVacationEducationDaysForAllZero(employeeHoursList),
+                    tableExportService.areExtraVacationDaysAllZero(employeeHoursList),
+                    tableExportService.areCreativeVacationDaysForAllZero(employeeHoursList),
+                    tableExportService.areVolunatryWorkAllDaysZero(employeeHoursList),
+                    tableExportService.areWorkMissionDaysZero(employeeHoursList),
+                    tableExportService.areDaysOfMissionEducationZero(employeeHoursList),
+                    tableExportService.sumAllHoursWorked(hoursResult)
+            );
 
-            boolean areSDaysAllZero = tableExportService.areSickDaysSZero(list);
-            boolean areSbAllZero = tableExportService.areSickSbZero(list);
-            boolean countAnnualVacAI = tableExportService.areAnnualVacationAIZero(list);
-            boolean unpaidVacationCountAB = tableExportService.areUnpaidVacationZero(list);
-            boolean parentalLeaveAA = tableExportService.areParentalLeaveDaysZero(list);
-            boolean educationVacationAMZero = tableExportService.areVacationEducationDaysForAllZero(list);
-            boolean areExtraVacationAPZero = tableExportService.areExtraVacationDaysAllZero(list);
-            boolean areCreatveVacationARDaysZero = tableExportService.areCreativeVacationDaysForAllZero(list);
-            boolean areVoluntaryWorkBDAllZero = tableExportService.areVolunatryWorkAllDaysZero(list);
-            boolean areMissionWorkAllDaysZero = tableExportService.areWorkMissionDaysZero(list);
-            boolean areEducationWorkDaysAllZero = tableExportService.areDaysOfMissionEducationZero(list);
-
-            double allHoursWorked = tableExportService.sumAllHoursWorked(hoursResult);
-
-            if ((list.size() > 0)) {
-
-                model.addAttribute("empl", employee);
-                model.addAttribute("list", list);
-                model.addAttribute("year", year);
-                model.addAttribute("month", monthNumberAndName.get(month));
-                model.addAttribute("monthNumber", month);
-                model.addAttribute("workHoursInMonth", workHoursThisMonth);
-                model.addAttribute("hoursRes", hoursResult);
-
-                model.addAttribute("form", new TableResultEditingDTO(results));
-
-                if (areSDaysAllZero == false)
-                    model.addAttribute("s", areSDaysAllZero);
-
-                if (areSbAllZero == false)
-                    model.addAttribute("sb", areSbAllZero);
-
-                if (countAnnualVacAI == false)
-                    model.addAttribute("ai", countAnnualVacAI);
-
-                if (unpaidVacationCountAB == false)
-                    model.addAttribute("ab", unpaidVacationCountAB);
-
-                if (parentalLeaveAA == false)
-                    model.addAttribute("aa", parentalLeaveAA);
-
-                if (educationVacationAMZero == false)
-                    model.addAttribute("am", educationVacationAMZero);
-
-                if (areExtraVacationAPZero == false)
-                    model.addAttribute("ap", areExtraVacationAPZero);
-
-                if (areCreatveVacationARDaysZero == false)
-                    model.addAttribute("ar", areCreatveVacationARDaysZero);
-
-                if (areVoluntaryWorkBDAllZero == false)
-                    model.addAttribute("bd", areVoluntaryWorkBDAllZero);
-
-                if (areMissionWorkAllDaysZero == false)
-                    model.addAttribute("kd", areMissionWorkAllDaysZero);
-
-                if (areEducationWorkDaysAllZero == false)
-                    model.addAttribute("km", areEducationWorkDaysAllZero);
-
-                model.addAttribute("allHWorked", allHoursWorked);
-
-
-                return "table-edit-employee";
-            } else {
-                return "no-results";
-            }
+            return new ResponseEntity<>(responseDTO, HttpStatusCode.valueOf(200));
         } catch (Exception e) {
-            e.printStackTrace();
-            return "no-results";
+            return new ResponseEntity<>("Error generating results: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
