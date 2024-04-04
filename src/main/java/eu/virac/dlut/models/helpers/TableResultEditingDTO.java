@@ -1,6 +1,7 @@
 package eu.virac.dlut.models.helpers;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -13,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TableResultEditingDTO {
 
-	private List<EmployeeAndHourDTO> results;
+	private List<EmployeeAndHourDTO> results = new ArrayList<>();
 	
 	public TableResultEditingDTO(List<EmployeeAndHourDTO> results) {
 		this.results = results;

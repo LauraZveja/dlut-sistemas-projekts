@@ -207,13 +207,19 @@ public class EmployeeTableExportController {
     }
 
     @PostMapping("dlut/tabele/rediget/darbinieks/{year}/{month}/{idempl}")
-    public String postEmployeeTableExportResultsForEditing(@PathVariable("year") int year,
-                                                           @PathVariable("month") int month, @PathVariable("idempl") int employeeId,
-                                                           @ModelAttribute TableResultEditingDTO form) {
+    public ResponseEntity<EmployeeSummaryResponseDTO> postEmployeeTableExportResultsForEditing(@PathVariable("year") int year,
+                                                                                               @PathVariable("month") int month, @PathVariable("idempl") int employeeId,
+                                                                                               @RequestBody TableResultEditingDTO form) {
+
 
         try {
+            ArrayList<EmployeeAndHourDTO> updatedEmployeeHoursList = tableExportService.selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
+            Map<Integer, Double> hoursResult = tableExportService.allHoursOneEmployeeOnDate(year, month, employeeId);
+            Employee employee = employeeService.selectOneEmployeeById(employeeId);
+            EmployeeDTO employeeDTO = new EmployeeDTO(employee.getName(), employee.getSurname());
+
             ArrayList<EmployeeAndHourDTO> oldList = tableExportService
-                    .selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employeeId);
+                    .selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(year, month, employee.getIdEmployee());
 
             for (EmployeeAndHourDTO temp : form.getResults()) {
                 for (EmployeeAndHourDTO oldTemp : oldList) {
@@ -234,12 +240,12 @@ public class EmployeeTableExportController {
                                         if ((oldE.getValue().contentEquals("0"))
                                                 || (oldE.getValue().contentEquals("BR"))) {
                                             emplTimeSheetService.saveNewFromEditEmployeeTable(year, month, e.getKey(),
-                                                    employeeId, temp.getFinanceSourceId(), hoursDouble,
+                                                    employee.getIdEmployee(), temp.getFinanceSourceId(), hoursDouble,
                                                     temp.getPosition());
                                             System.out.println(temp.getPosition());
                                             System.out.println(hoursDouble);
                                         } else
-                                            emplTimeSheetService.updateEntry(year, month, e.getKey(), employeeId,
+                                            emplTimeSheetService.updateEntry(year, month, e.getKey(), employee.getIdEmployee(),
                                                     temp.getFinanceSourceId(), hoursDouble);
                                     }
                                 }
@@ -249,17 +255,50 @@ public class EmployeeTableExportController {
                         if (temp.getVacationHours() != oldTemp.getVacationHours()) {
 
                             fullTimeEquivalentService.updateVacationHoursByYearMonthFinSourceEmployeeFromEditEmployee(
-                                    year, month, employeeId, temp.getFinanceSourceId(), temp.getVacationHours());
+                                    year, month, employee.getIdEmployee(), temp.getFinanceSourceId(), temp.getVacationHours());
                         }
                     }
                 }
             }
 
-            return "redirect:/dlut/tabele/eksportet/darbinieks/" + year + "/" + month + "/" + employeeId;
-        } catch (Exception e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-            return "no-results";
+            Map<Integer, String> monthNumberAndName = new HashedMap<>();
+            monthNumberAndName.put(1, "janvāris");
+            monthNumberAndName.put(2, "februāris");
+            monthNumberAndName.put(3, "marts");
+            monthNumberAndName.put(4, "aprīlis");
+            monthNumberAndName.put(5, "maijs");
+            monthNumberAndName.put(6, "jūnijs");
+            monthNumberAndName.put(7, "jūlijs");
+            monthNumberAndName.put(8, "augusts");
+            monthNumberAndName.put(9, "septembris");
+            monthNumberAndName.put(10, "oktobris");
+            monthNumberAndName.put(11, "novembris");
+            monthNumberAndName.put(12, "decembris");
+
+
+            EmployeeSummaryResponseDTO responseDTO = new EmployeeSummaryResponseDTO(
+                    employeeDTO,
+                    new ArrayList<>(updatedEmployeeHoursList),
+                    tableExportService.sumAllHoursWorked(hoursResult),
+                    monthNumberAndName,
+                    tableExportService.areSickDaysSZero(updatedEmployeeHoursList),
+                    tableExportService.areSickSbZero(updatedEmployeeHoursList),
+                    tableExportService.areAnnualVacationAIZero(updatedEmployeeHoursList),
+                    tableExportService.areUnpaidVacationZero(updatedEmployeeHoursList),
+                    tableExportService.areParentalLeaveDaysZero(updatedEmployeeHoursList),
+                    tableExportService.areVacationEducationDaysForAllZero(updatedEmployeeHoursList),
+                    tableExportService.areExtraVacationDaysAllZero(updatedEmployeeHoursList),
+                    tableExportService.areCreativeVacationDaysForAllZero(updatedEmployeeHoursList),
+                    tableExportService.areVolunatryWorkAllDaysZero(updatedEmployeeHoursList),
+                    tableExportService.areWorkMissionDaysZero(updatedEmployeeHoursList),
+                    tableExportService.areDaysOfMissionEducationZero(updatedEmployeeHoursList),
+                    tableExportService.sumAllHoursWorked(hoursResult)
+            );
+
+            return new ResponseEntity<>(responseDTO, HttpStatusCode.valueOf(200));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
