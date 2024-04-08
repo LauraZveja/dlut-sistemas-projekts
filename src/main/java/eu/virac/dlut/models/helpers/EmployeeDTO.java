@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Pattern;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 public class EmployeeDTO {
 
@@ -22,4 +21,29 @@ public class EmployeeDTO {
     @Pattern(regexp = "^\\p{Lu}{1}\\p{Ll}+( \\p{Lu}{1}\\p{Ll}+|-\\p{Lu}{1}\\p{Ll}+)?$")
     private String surname;
 
+    @NotNull
+    private String position;
+
+    @NotNull
+    private boolean isElected;
+
+    @NotNull
+    private String workContractNoAndDate;
+
+    @NotNull
+    private String departmentName;
+
+    public EmployeeDTO(String name, String surname) {
+        this.name = name;
+        this.surname = surname;
+    }
+
+    public EmployeeDTO(String name, String surname, String position, boolean isElected, String workContractNoAndDate, String departmentName) {
+        this.name = name;
+        this.surname = surname;
+        this.position = position;
+        this.isElected = isElected;
+        this.workContractNoAndDate = workContractNoAndDate;
+        this.departmentName = departmentName;
+    }
 }
