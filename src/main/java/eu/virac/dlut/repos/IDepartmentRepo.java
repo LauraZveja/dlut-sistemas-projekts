@@ -6,4 +6,6 @@ import eu.virac.dlut.models.Department;
 
 public interface IDepartmentRepo extends CrudRepository<Department, Integer>{
 
+    Department findByTitle(String title);
+
 }

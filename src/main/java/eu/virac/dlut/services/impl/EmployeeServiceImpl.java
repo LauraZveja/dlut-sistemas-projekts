@@ -2,6 +2,9 @@ package eu.virac.dlut.services.impl;
 
 import java.util.ArrayList;
 
+import eu.virac.dlut.models.Department;
+import eu.virac.dlut.models.helpers.EmployeeDTO;
+import eu.virac.dlut.repos.IDepartmentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	
 	@Autowired
 	IEmployeeRepo employeeRepo;
+
+	@Autowired
+	IDepartmentRepo departmentRepo;
 
 	@Override
 	public ArrayList<Employee> selectAllEmployees() {
@@ -51,6 +57,19 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	public ArrayList<Employee> selectAllEmployeesInIndirectVuas(int indirectVuasId) {
 		ArrayList<Employee> res =  employeeRepo.getAllEmployeesInIndirectVuas(indirectVuasId);
 		return res;
+	}
+
+	@Override
+	public EmployeeDTO insertEmployee(EmployeeDTO employeeDTO) throws Exception {
+		Department department = departmentRepo.findByTitle(employeeDTO.getDepartmentName());
+
+		if (department != null) {
+			Employee employee = new Employee(employeeDTO.getName(), employeeDTO.getSurname(), employeeDTO.getPosition(), employeeDTO.isElected(), employeeDTO.getWorkContractNoAndDate(), department);
+			employeeRepo.save(employee);
+			return employeeDTO;
+		} else {
+			throw new Exception("Nepareizs departamenta nosaukums");
+		}
 	}
 
 }

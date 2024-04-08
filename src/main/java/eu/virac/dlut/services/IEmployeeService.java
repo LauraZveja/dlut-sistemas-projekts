@@ -3,6 +3,7 @@ package eu.virac.dlut.services;
 import java.util.ArrayList;
 
 import eu.virac.dlut.models.Employee;
+import eu.virac.dlut.models.helpers.EmployeeDTO;
 
 public interface IEmployeeService {
 
@@ -18,5 +19,6 @@ public interface IEmployeeService {
 
 	ArrayList<Employee> selectAllEmployeesInIndirectVuas(int indirectVuasId);
 
+	EmployeeDTO insertEmployee(EmployeeDTO employeeDTO) throws Exception;
 	
 }
