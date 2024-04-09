@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import eu.virac.dlut.models.Department;
 import eu.virac.dlut.models.helpers.EmployeeDTO;
 import eu.virac.dlut.repos.IDepartmentRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,18 +88,38 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
 	@Override
 	public EmployeeDTO updateEmployeeById(EmployeeDTO employeeDTO) {
-		Employee employee = employeeRepo.findById(employeeDTO.getIdEmployee()).get();
-		employee.setName(employeeDTO.getName());
-		employee.setSurname(employeeDTO.getSurname());
-		employee.setPosition(employeeDTO.getPosition());
-		employee.setElected(employeeDTO.isElected());
-		employee.setWorkContractNoDate(employeeDTO.getWorkContractNoDate());
-		employeeRepo.save(employee);
+		Employee employee = employeeRepo.findById(employeeDTO.getIdEmployee())
+				.orElseThrow(() -> new EntityNotFoundException("Employee not found."));
+		boolean isUpdated = false;
+
+		if (employeeDTO.getName() != null && !employeeDTO.getName().equals(employee.getName())) {
+			employee.setName(employeeDTO.getName());
+			isUpdated = true;
+		}
+		if (employeeDTO.getSurname() != null && !employeeDTO.getSurname().equals(employee.getSurname())) {
+			employee.setSurname(employeeDTO.getSurname());
+			isUpdated = true;
+		}
+		if (employeeDTO.getPosition() != null && !employeeDTO.getPosition().equals(employee.getPosition())) {
+			employee.setPosition(employeeDTO.getPosition());
+			isUpdated = true;
+		}
+		if (employeeDTO.getWorkContractNoDate() != null && !employeeDTO.getWorkContractNoDate().equals(employee.getWorkContractNoDate())) {
+			employee.setWorkContractNoDate(employeeDTO.getWorkContractNoDate());
+			isUpdated = true;
+		}
+		if (employeeDTO.isElected() != employee.isElected()) {
+			employee.setElected(employeeDTO.isElected());
+			isUpdated = true;
+		}
+
+		if (isUpdated) {
+			employeeRepo.save(employee);
+		}
 
 		EmployeeDTO updatedEmployee = new EmployeeDTO(employee.getIdEmployee(), employee.getName(), employee.getSurname(), employee.getPosition(), employee.isElected(), employee.getWorkContractNoDate(), employee.getDepartment().getTitle());
 
 		return updatedEmployee;
-		//uztaisīt pārbaudes
 
 	}
 
