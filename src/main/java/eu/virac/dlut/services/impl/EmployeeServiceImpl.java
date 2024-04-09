@@ -117,10 +117,15 @@ public class EmployeeServiceImpl implements IEmployeeService {
 			employeeRepo.save(employee);
 		}
 
-		EmployeeDTO updatedEmployee = new EmployeeDTO(employee.getIdEmployee(), employee.getName(), employee.getSurname(), employee.getPosition(), employee.isElected(), employee.getWorkContractNoDate(), employee.getDepartment().getTitle());
+        return new EmployeeDTO(employee.getIdEmployee(), employee.getName(), employee.getSurname(), employee.getPosition(), employee.isElected(), employee.getWorkContractNoDate(), employee.getDepartment().getTitle());
 
-		return updatedEmployee;
+	}
 
+	@Override
+	public void deleteEmployeeById(EmployeeDTO employeeDTO) {
+		Employee employee = employeeRepo.findById(employeeDTO.getIdEmployee())
+				.orElseThrow(() -> new EntityNotFoundException("Employee not found."));
+		employeeRepo.delete(employee);
 	}
 
 }

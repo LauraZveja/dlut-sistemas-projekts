@@ -25,5 +25,6 @@ public interface IEmployeeService {
 
 	EmployeeDTO updateEmployeeById(EmployeeDTO employeeDTO);
 
-	
+	void deleteEmployeeById(EmployeeDTO employeeDTO);
+
 }
