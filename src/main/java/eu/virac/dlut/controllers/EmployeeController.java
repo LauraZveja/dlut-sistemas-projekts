@@ -31,4 +31,14 @@ public class EmployeeController {
     public ResponseEntity<ArrayList<EmployeeDTO>> showAllEmployees() {
         return new ResponseEntity<ArrayList<EmployeeDTO>>(employeeService.retrieveAllDataForEmployees(), HttpStatusCode.valueOf(200));
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
+        try {
+            employeeService.updateEmployeeById(employeeDTO);
+            return new ResponseEntity<>(employeeDTO, HttpStatusCode.valueOf(200));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+        }
+    }
 }

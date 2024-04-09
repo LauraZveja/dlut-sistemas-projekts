@@ -33,12 +33,15 @@ public class EmployeeDTO {
     @NotNull
     private String departmentName;
 
+    private int idEmployee;
+
     public EmployeeDTO(String name, String surname) {
         this.name = name;
         this.surname = surname;
     }
 
-    public EmployeeDTO(String name, String surname, String position, boolean isElected, String workContractNoAndDate, String departmentName) {
+    public EmployeeDTO(int idEmployee, String name, String surname, String position, boolean isElected, String workContractNoAndDate, String departmentName) {
+        this.idEmployee = idEmployee;
         this.name = name;
         this.surname = surname;
         this.position = position;
@@ -46,4 +49,5 @@ public class EmployeeDTO {
         this.workContractNoDate = workContractNoAndDate;
         this.departmentName = departmentName;
     }
+
 }

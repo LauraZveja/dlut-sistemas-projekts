@@ -67,6 +67,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 		if (department != null && existingEmployee == null) {
 			Employee employee = new Employee(employeeDTO.getName(), employeeDTO.getSurname(), employeeDTO.getPosition(), employeeDTO.isElected(), employeeDTO.getWorkContractNoDate(), department);
 			employeeRepo.save(employee);
+			employeeDTO.setIdEmployee(employee.getIdEmployee());
 			return employeeDTO;
 		} else {
 			throw new Exception("Nepareizs departamenta nosaukums / darbinieks jau eksistē datubāzē");
@@ -79,9 +80,26 @@ public class EmployeeServiceImpl implements IEmployeeService {
 		ArrayList<Employee> allEmployees = (ArrayList<Employee>) employeeRepo.findAll();
 
 		for (Employee temp : allEmployees){
-			result.add(new EmployeeDTO(temp.getName(), temp.getSurname(), temp.getPosition(), temp.isElected(), temp.getWorkContractNoDate(), temp.getDepartment().getTitle()));
+			result.add(new EmployeeDTO(temp.getIdEmployee(), temp.getName(), temp.getSurname(), temp.getPosition(), temp.isElected(), temp.getWorkContractNoDate(), temp.getDepartment().getTitle()));
 		}
 		return result;
+	}
+
+	@Override
+	public EmployeeDTO updateEmployeeById(EmployeeDTO employeeDTO) {
+		Employee employee = employeeRepo.findById(employeeDTO.getIdEmployee()).get();
+		employee.setName(employeeDTO.getName());
+		employee.setSurname(employeeDTO.getSurname());
+		employee.setPosition(employeeDTO.getPosition());
+		employee.setElected(employeeDTO.isElected());
+		employee.setWorkContractNoDate(employeeDTO.getWorkContractNoDate());
+		employeeRepo.save(employee);
+
+		EmployeeDTO updatedEmployee = new EmployeeDTO(employee.getIdEmployee(), employee.getName(), employee.getSurname(), employee.getPosition(), employee.isElected(), employee.getWorkContractNoDate(), employee.getDepartment().getTitle());
+
+		return updatedEmployee;
+		//uztaisīt pārbaudes
+
 	}
 
 }

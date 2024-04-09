@@ -22,5 +22,8 @@ public interface IEmployeeService {
 	EmployeeDTO insertEmployee(EmployeeDTO employeeDTO) throws Exception;
 
 	ArrayList<EmployeeDTO> retrieveAllDataForEmployees();
+
+	EmployeeDTO updateEmployeeById(EmployeeDTO employeeDTO);
+
 	
 }
