@@ -30,4 +30,6 @@ public interface IEmployeeRepo extends CrudRepository<Employee, Integer>{
 	@Query(value = "CALL GetAllEmployeesInIndirectVuas(:indirectVuasId);", nativeQuery = true)
 	ArrayList<Employee> getAllEmployeesInIndirectVuas(@Param("indirectVuasId") int indirectVuasId);
 
+	Employee findByWorkContractNoDate(String workContractNoDate);
+
 }

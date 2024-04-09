@@ -62,7 +62,7 @@ public class Employee {
 	
 	@NotNull
 	@Column(name = "WorkContractNoDate")
-	private String workContractNoAndDate;
+	private String workContractNoDate;
 	
 	//saite ar nodaļu
 	@ManyToOne
@@ -84,13 +84,13 @@ public class Employee {
 	@ToString.Exclude
 	private Collection<FullTimeEquivalent> fullTimeEquivalents;
 
-	public Employee(String name, String surname, String position, boolean isElected, String workContractNoAndDate,
+	public Employee(String name, String surname, String position, boolean isElected, String workContractNoDate,
 			Department department) {
 		this.name = name;
 		this.surname = surname;
 		this.position = position;
 		this.isElected = isElected;
-		this.workContractNoAndDate = workContractNoAndDate;
+		this.workContractNoDate = workContractNoDate;
 		this.department = department;
 	}
 	

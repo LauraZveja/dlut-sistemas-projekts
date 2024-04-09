@@ -62,13 +62,14 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	@Override
 	public EmployeeDTO insertEmployee(EmployeeDTO employeeDTO) throws Exception {
 		Department department = departmentRepo.findByTitle(employeeDTO.getDepartmentName());
+		Employee existingEmployee = employeeRepo.findByWorkContractNoDate(employeeDTO.getWorkContractNoDate());
 
-		if (department != null) {
-			Employee employee = new Employee(employeeDTO.getName(), employeeDTO.getSurname(), employeeDTO.getPosition(), employeeDTO.isElected(), employeeDTO.getWorkContractNoAndDate(), department);
+		if (department != null && existingEmployee == null) {
+			Employee employee = new Employee(employeeDTO.getName(), employeeDTO.getSurname(), employeeDTO.getPosition(), employeeDTO.isElected(), employeeDTO.getWorkContractNoDate(), department);
 			employeeRepo.save(employee);
 			return employeeDTO;
 		} else {
-			throw new Exception("Nepareizs departamenta nosaukums");
+			throw new Exception("Nepareizs departamenta nosaukums / darbinieks jau eksistē datubāzē");
 		}
 	}
 

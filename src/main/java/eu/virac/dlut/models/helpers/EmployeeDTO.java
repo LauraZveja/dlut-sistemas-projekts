@@ -28,7 +28,7 @@ public class EmployeeDTO {
     private boolean isElected;
 
     @NotNull
-    private String workContractNoAndDate;
+    private String workContractNoDate;
 
     @NotNull
     private String departmentName;
@@ -43,7 +43,7 @@ public class EmployeeDTO {
         this.surname = surname;
         this.position = position;
         this.isElected = isElected;
-        this.workContractNoAndDate = workContractNoAndDate;
+        this.workContractNoDate = workContractNoAndDate;
         this.departmentName = departmentName;
     }
 }
