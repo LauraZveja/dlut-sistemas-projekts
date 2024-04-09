@@ -20,5 +20,7 @@ public interface IEmployeeService {
 	ArrayList<Employee> selectAllEmployeesInIndirectVuas(int indirectVuasId);
 
 	EmployeeDTO insertEmployee(EmployeeDTO employeeDTO) throws Exception;
+
+	ArrayList<EmployeeDTO> retrieveAllDataForEmployees();
 	
 }

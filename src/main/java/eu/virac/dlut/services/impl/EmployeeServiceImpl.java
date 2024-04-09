@@ -73,4 +73,15 @@ public class EmployeeServiceImpl implements IEmployeeService {
 		}
 	}
 
+	@Override
+	public ArrayList<EmployeeDTO> retrieveAllDataForEmployees() {
+		ArrayList<EmployeeDTO> result = new ArrayList<>();
+		ArrayList<Employee> allEmployees = (ArrayList<Employee>) employeeRepo.findAll();
+
+		for (Employee temp : allEmployees){
+			result.add(new EmployeeDTO(temp.getName(), temp.getSurname(), temp.getPosition(), temp.isElected(), temp.getWorkContractNoDate(), temp.getDepartment().getTitle()));
+		}
+		return result;
+	}
+
 }
