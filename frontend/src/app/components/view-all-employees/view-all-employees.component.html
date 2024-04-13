@@ -9,7 +9,7 @@
           <th>Amats</th>
           <th>Ir ievēlēts</th>
           <th>Darba līgums un datums</th>
-          <!--<th>Department</th>-->
+          <th>Nodaļa</th>
         </tr>
       </thead>
       <tbody>
@@ -21,14 +21,15 @@
           <td>{{ employee.elected ? 'Jā' : 'Nē' }}</td>
           <td>{{ employee.workContractNoDate }}</td>
           <!--<td>{{ employee.department.title }}</td> -->
-          <!--
+          
           <td>
-            <button (click)="updateEmployee(employee.idEmployee)" class="btn btn-info">Update</button>
-            <button (click)="deleteEmployee(employee.idEmployee)" class="btn btn-danger ml-2">Delete</button>
+            <button class="btn btn-outline-success me-2">Labot</button>
+            <button class="btn btn-outline-danger">Dzēst</button>
           </td>
-          -->
         </tr>
       </tbody>
     </table>
+      <button class="btn btn-outline-dark">Pievienot</button>
+    
   </div>
   
