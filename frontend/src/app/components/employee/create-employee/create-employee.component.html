@@ -1,1 +1,34 @@
-<p>create-employee works!</p>
+<div class="container">
+    <h2>Pievienot jaunu darbninieku</h2>
+    <form (ngSubmit)="onSubmit()">
+        <div class="form-group mb-3">
+            <label for="name">Vārds:</label>
+            <input type="text" class="form-control" id="name" [(ngModel)]="employee.name" name="name" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="surname">Uzvārds:</label>
+            <input type="text" class="form-control" id="surname" [(ngModel)]="employee.surname" name="surname" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="position">Amats:</label>
+            <input type="text" class="form-control" id="position" [(ngModel)]="employee.position" name="position"
+                required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="elected">Ir ievēlēts:</label>
+            <input type="checkbox" class="form-check-input" id="elected" [(ngModel)]="employee.elected" name="elected">
+        </div>
+        <div class="form-group mb-3">
+            <label for="departmentName">Nodaļa:</label>
+            <input type="text" class="form-control" id="departmentName" [(ngModel)]="employee.departmentName"
+                name="departmentName" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="workContractNoDate">Darba līgums un datums:</label>
+            <input type="text" class="form-control" id="workContractNoDate" [(ngModel)]="employee.workContractNoDate"
+                name="workContractNoDate" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Pievienot</button>
+        <button type="button" class="btn btn-outline-dark" (click)="goBack()">Atpakaļ</button>
+    </form>
+</div>

@@ -26,4 +26,8 @@ export class ViewAllEmployeesComponent implements OnInit {
   navigateToUpdate(employee: Employee): void {
     this.router.navigate(['/update-employee'], { state: { employee } });
   }
+
+  navigateToCreate(): void {
+    this.router.navigate(['/create-employee']);
+  }
 }

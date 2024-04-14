@@ -8,13 +8,13 @@ export class Employee {
     departmentName: string;
   
     constructor(
-      idEmployee: number,
-      name: string,
-      surname: string,
-      position: string,
-      elected: boolean,
-      workContractNoDate: string,
-      departmentName: string
+      idEmployee: number = 0,
+      name: string = '',
+      surname: string = '',
+      position: string = '',
+      elected: boolean = false,
+      workContractNoDate: string = '',
+      departmentName: string = ''
     ) {
       this.idEmployee = idEmployee;
       this.name = name;
