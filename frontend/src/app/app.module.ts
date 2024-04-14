@@ -4,13 +4,15 @@ import { FormsModule } from "@angular/forms";
 import { BrowserModule} from "@angular/platform-browser";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { ViewAllEmployeesComponent } from "./components/view-all-employees/view-all-employees.component";
+import { ViewAllEmployeesComponent } from "./components/employee/view-all-employees/view-all-employees.component";
 import { EmployeeService } from "./services/employee.service";
+import { UpdateEmployeeComponent } from "./components/employee/update-employee/update-employee.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    ViewAllEmployeesComponent
+    ViewAllEmployeesComponent,
+    UpdateEmployeeComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,3 @@
-import { Department } from "./department.model";
-
 export class Employee {
     idEmployee: number;
     name: string;
@@ -7,7 +5,7 @@ export class Employee {
     position: string;
     elected: boolean;
     workContractNoDate: string;
-    department: Department;
+    departmentName: string;
   
     constructor(
       idEmployee: number,
@@ -16,7 +14,7 @@ export class Employee {
       position: string,
       elected: boolean,
       workContractNoDate: string,
-      department: Department
+      departmentName: string
     ) {
       this.idEmployee = idEmployee;
       this.name = name;
@@ -24,6 +22,7 @@ export class Employee {
       this.position = position;
       this.elected = elected;
       this.workContractNoDate = workContractNoDate;
-      this.department = department;
+      this.departmentName = departmentName;
     }
+
 }

@@ -1,4 +1,4 @@
-<div class="container mt-3">
+<div class="container container-custom mt-3">
     <h2>Darbinieku saraksts</h2>
     <table class="table table-hover">
       <thead class="thead-dark">
@@ -20,10 +20,10 @@
           <td>{{ employee.position }}</td>
           <td>{{ employee.elected ? 'Jā' : 'Nē' }}</td>
           <td>{{ employee.workContractNoDate }}</td>
-          <!--<td>{{ employee.department.title }}</td> -->
+          <td>{{ employee.departmentName }}</td>
           
           <td>
-            <button class="btn btn-outline-success me-2">Labot</button>
+            <button class="btn btn-outline-success me-2" (click)="navigateToUpdate(employee)">Labot</button>
             <button class="btn btn-outline-danger">Dzēst</button>
           </td>
         </tr>

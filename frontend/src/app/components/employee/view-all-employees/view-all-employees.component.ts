@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Employee } from '../../models/employee.model';
-import { EmployeeService } from '../../services/employee.service';
+import { Employee } from '../../../models/employee.model';
+import { EmployeeService } from '../../../services/employee.service';
 
 @Component({
   selector: 'app-view-all-employees',
@@ -21,5 +21,9 @@ export class ViewAllEmployeesComponent implements OnInit {
     this.employeeService.getEmployeesList().subscribe(data => {
       this.employees = data;
     });
+  }
+
+  navigateToUpdate(employee: Employee): void {
+    this.router.navigate(['/update-employee'], { state: { employee } });
   }
 }
