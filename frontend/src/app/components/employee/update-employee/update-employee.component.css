@@ -1,0 +1,9 @@
+h2, h3 {
+    color: #006400; 
+    font-weight: bold;
+}
+
+.form-group label {
+    color: #307032;
+    font-weight: bold;
+}
