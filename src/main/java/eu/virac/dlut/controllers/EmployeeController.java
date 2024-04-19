@@ -47,7 +47,7 @@ public class EmployeeController {
     public ResponseEntity<?> deleteEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
         try {
             employeeService.deleteEmployeeById(employeeDTO);
-            return new ResponseEntity<>("Dati dzēsti no datubāzes.", HttpStatusCode.valueOf(200));
+            return new ResponseEntity<>(employeeService.retrieveAllDataForEmployees(), HttpStatusCode.valueOf(200));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
         }
