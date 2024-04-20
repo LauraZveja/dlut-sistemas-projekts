@@ -8,7 +8,7 @@ BEGIN
     JOIN order_work ow ON e.id_employee = ow.id_employee_order
     JOIN finance_order_work fow ON ow.id_order = fow.id_ord_work
     JOIN project p ON fow.id_project = p.id_fin_source
-    WHERE p.id_fin_source = projId;
+    WHERE p.id_fin_source = projId AND e.is_deleted = FALSE;
 END$$
 
 DELIMITER ;
@@ -23,7 +23,7 @@ BEGIN
     JOIN order_work ow ON e.id_employee = ow.id_employee
     JOIN finance_order_work fow ON ow.id_order = fow.id_ord_work
     JOIN base_fin b ON fow.id_base_fin = b.id_fin_source
-    WHERE b.id_fin_source = baseFinId;
+    WHERE b.id_fin_source = baseFinId AND e.is_deleted = FALSE;
 END$$
 
 DELIMITER ;
@@ -39,7 +39,7 @@ BEGIN
     JOIN order_work ow ON e.id_employee = ow.id_employee
     JOIN finance_order_work fow ON ow.id_order = fow.id_ord_work
     JOIN academic_work_load awl ON fow.id_ac_work_load = awl.id_fin_source
-    WHERE awl.id_fin_source = academicWorkLoadId;
+    WHERE awl.id_fin_source = academicWorkLoadId AND e.is_deleted = FALSE;
 END$$
 
 DELIMITER ;
@@ -54,7 +54,7 @@ BEGIN
     JOIN order_work ow ON e.id_employee = ow.id_employee
     JOIN finance_order_work fow ON ow.id_order = fow.id_ord_work
     JOIN indirect_vuas i ON fow.id_indirectvuas = i.id_fin_source
-    WHERE i.id_fin_source = indirectVuasId;
+    WHERE i.id_fin_source = indirectVuasId AND e.is_deleted = FALSE;
 END$$
 
 DELIMITER ;

@@ -25,22 +25,37 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
 	@Override
 	public ArrayList<Employee> selectAllEmployees() {
-		return (ArrayList<Employee>) employeeRepo.findAll();
+		ArrayList<Employee> allEmployees = (ArrayList<Employee>) employeeRepo.findAll();
+		ArrayList<Employee> activeEmployees = new ArrayList<>();
+		for (Employee employee : allEmployees) {
+			if (!employee.isDeleted()) {
+				activeEmployees.add(employee);
+			}
+		}
+		return activeEmployees;
 	}
 
 	@Override
 	public ArrayList<Employee> selectAllEmployeesInOneProject(int projectId) {
 		ArrayList<Employee> res =  employeeRepo.getAllEmployeesInOneProject(projectId);
-		return res;
+		ArrayList<Employee> activeEmployees = new ArrayList<>();
+		for (Employee employee : res) {
+			if (!employee.isDeleted()) {
+				activeEmployees.add(employee);
+			}
+		}
+		return activeEmployees;
 	}
 
 	@Override
-	public Employee selectOneEmployeeById(int employeeId) throws Exception{
-			if (employeeRepo.existsById(employeeId))
-				return employeeRepo.findById(employeeId).get();
-			else
-				throw new Exception("Darbinieka id nav pareizs");
+	public Employee selectOneEmployeeById(int employeeId) throws Exception {
+		Employee employee = employeeRepo.findById(employeeId)
+				.orElseThrow(() -> new Exception("Darbinieks nav atrasts."));
+		if (employee.isDeleted()) {
+			throw new Exception("Darbinieks ir dzēsts.");
 		}
+		return employee;
+	}
 
 	@Override
 	public ArrayList<Employee> selectAllEmployeesInBaseFin(int baseFinId) {
@@ -81,15 +96,17 @@ public class EmployeeServiceImpl implements IEmployeeService {
 		ArrayList<Employee> allEmployees = (ArrayList<Employee>) employeeRepo.findAll();
 
 		for (Employee temp : allEmployees){
-			result.add(new EmployeeDTO(temp.getIdEmployee(), temp.getName(), temp.getSurname(), temp.getPosition(), temp.isElected(), temp.getWorkContractNoDate(), temp.getDepartment().getTitle()));
+			if (!temp.isDeleted()) {
+				result.add(new EmployeeDTO(temp.getIdEmployee(), temp.getName(), temp.getSurname(), temp.getPosition(), temp.isElected(), temp.getWorkContractNoDate(), temp.getDepartment().getTitle()));
+			}
 		}
 		return result;
 	}
 
 	@Override
-	public EmployeeDTO updateEmployeeById(EmployeeDTO employeeDTO) {
-		Employee employee = employeeRepo.findById(employeeDTO.getIdEmployee())
-				.orElseThrow(() -> new EntityNotFoundException("Employee not found."));
+	public EmployeeDTO updateEmployeeById(EmployeeDTO employeeDTO) throws Exception {
+		Employee employee = selectOneEmployeeById(employeeDTO.getIdEmployee());
+
 		boolean isUpdated = false;
 
 		if (employeeDTO.getName() != null && !employeeDTO.getName().equals(employee.getName())) {
@@ -117,15 +134,16 @@ public class EmployeeServiceImpl implements IEmployeeService {
 			employeeRepo.save(employee);
 		}
 
-        return new EmployeeDTO(employee.getIdEmployee(), employee.getName(), employee.getSurname(), employee.getPosition(), employee.isElected(), employee.getWorkContractNoDate(), employee.getDepartment().getTitle());
-
+		return new EmployeeDTO(employee.getIdEmployee(), employee.getName(), employee.getSurname(), employee.getPosition(), employee.isElected(), employee.getWorkContractNoDate(), employee.getDepartment().getTitle());
 	}
+
 
 	@Override
 	public void deleteEmployeeById(EmployeeDTO employeeDTO) {
 		Employee employee = employeeRepo.findById(employeeDTO.getIdEmployee())
 				.orElseThrow(() -> new EntityNotFoundException("Employee not found."));
-		employeeRepo.delete(employee);
+		employee.setDeleted(true);
+		employeeRepo.save(employee);
 	}
 
 }

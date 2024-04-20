@@ -84,6 +84,10 @@ public class Employee {
 	@ToString.Exclude
 	private Collection<FullTimeEquivalent> fullTimeEquivalents;
 
+	@NotNull
+	@Column(name = "isDeleted")
+	private boolean isDeleted;
+
 	public Employee(String name, String surname, String position, boolean isElected, String workContractNoDate,
 			Department department) {
 		this.name = name;
@@ -92,6 +96,7 @@ public class Employee {
 		this.isElected = isElected;
 		this.workContractNoDate = workContractNoDate;
 		this.department = department;
+		this.isDeleted = false;
 	}
 	
 	//pievieno un izņem finansējuma plānojumu

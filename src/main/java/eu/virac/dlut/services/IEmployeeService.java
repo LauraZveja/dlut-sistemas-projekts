@@ -23,7 +23,7 @@ public interface IEmployeeService {
 
 	ArrayList<EmployeeDTO> retrieveAllDataForEmployees();
 
-	EmployeeDTO updateEmployeeById(EmployeeDTO employeeDTO);
+	EmployeeDTO updateEmployeeById(EmployeeDTO employeeDTO) throws Exception;
 
 	void deleteEmployeeById(EmployeeDTO employeeDTO);
 
