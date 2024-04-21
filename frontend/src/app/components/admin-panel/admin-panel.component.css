@@ -1,0 +1,9 @@
+.admin-nav-container {
+    text-align: center;
+    margin: 20px auto; 
+    max-width: 600px; 
+  }
+  
+  .nav-link {
+    margin: 0 10px;
+  }
