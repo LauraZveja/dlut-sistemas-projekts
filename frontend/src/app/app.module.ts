@@ -9,6 +9,7 @@ import { EmployeeService } from "./services/employee.service";
 import { UpdateEmployeeComponent } from "./components/employee/update-employee/update-employee.component";
 import { CreateEmployeeComponent } from "./components/employee/create-employee/create-employee.component";
 import { AdminPanelComponent } from "./components/admin-panel/admin-panel.component";
+import { RouterModule } from "@angular/router";
 
 
 @NgModule({
@@ -17,7 +18,7 @@ import { AdminPanelComponent } from "./components/admin-panel/admin-panel.compon
     ViewAllEmployeesComponent,
     UpdateEmployeeComponent,
     CreateEmployeeComponent,
-    AdminPanelComponent
+    AdminPanelComponent,
     
   ],
   imports: [

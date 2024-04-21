@@ -1,9 +1,9 @@
-/* Color Theme and Global Styles */
+
 :root {
-    --green: #4CAF50; /* Primary color for the application */
-    --white: #FFFFFF; /* Typically used for background and text */
-    --grey: #D3D3D3; /* For offsets, backgrounds, or secondary elements */
-    --dark-green: #388E3C; /* Darker shade of green for hover */
+    --green: #4CAF50; 
+    --white: #FFFFFF; 
+    --grey: #D3D3D3; 
+    --dark-green: #388E3C; 
 }
 
 body, html {
@@ -34,7 +34,11 @@ footer {
 
 /* Main Content Styles */
 .main-content {
-    flex: 1; /* Adjust height minus nav and footer */
+    flex: 1; 
     padding: 1rem;
     
+}
+
+.navbar-nav .nav-link {
+    font-size: 1.25rem; 
 }
