@@ -9,6 +9,7 @@ import { EmployeeService } from "./services/employee/employee.service";
 import { UpdateEmployeeComponent } from "./components/employee/update-employee/update-employee.component";
 import { CreateEmployeeComponent } from "./components/employee/create-employee/create-employee.component";
 import { AdminPanelComponent } from "./components/admin-panel/admin-panel.component";
+import { CreateDepartmentComponent } from "./components/department/create-department/create-department.component";
 import { RouterModule } from "@angular/router";
 import { ViewAllDepartmentsComponent } from "./components/department/view-all-departments/view-all-departments.component";
 import { UpdateDepartmentComponent } from "./components/department/update-department/update-department.component";
@@ -22,7 +23,8 @@ import { UpdateDepartmentComponent } from "./components/department/update-depart
     CreateEmployeeComponent,
     AdminPanelComponent,
     ViewAllDepartmentsComponent,
-    UpdateDepartmentComponent
+    UpdateDepartmentComponent,
+    CreateDepartmentComponent,
     
   ],
   imports: [

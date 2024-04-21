@@ -13,4 +13,4 @@ public interface IDepartmentService {
     DepartmentDTO updateDepartmentById(DepartmentDTO departmentDTO) throws Exception;
 
     void deleteDepartmentById(DepartmentDTO departmentDTO);
-}
+} 

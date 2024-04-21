@@ -1,1 +1,15 @@
-<p>create-department works!</p>
+<div class="container">
+    <h2>Pievienot jaunu nodaļu</h2>
+    <form (ngSubmit)="onSubmit()">
+        <div class="form-group mb-3">
+            <label for="name">Nosaukums:</label>
+            <input type="text" class="form-control" id="title" [(ngModel)]="department.title" name="title" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="surname">Abreviatūra:</label>
+            <input type="text" class="form-control" id="abbreviation" [(ngModel)]="department.abbreviation" name="abbreviation" required>
+        </div>
+        <button type="submit" class="btn btn-outline-primary me-2">Pievienot</button>
+        <button type="button" class="btn btn-outline-dark" (click)="goBack()">Atpakaļ</button>
+    </form>
+</div>
