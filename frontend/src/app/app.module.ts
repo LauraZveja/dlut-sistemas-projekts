@@ -11,6 +11,7 @@ import { CreateEmployeeComponent } from "./components/employee/create-employee/c
 import { AdminPanelComponent } from "./components/admin-panel/admin-panel.component";
 import { RouterModule } from "@angular/router";
 import { ViewAllDepartmentsComponent } from "./components/department/view-all-departments/view-all-departments.component";
+import { UpdateDepartmentComponent } from "./components/department/update-department/update-department.component";
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ViewAllDepartmentsComponent } from "./components/department/view-all-de
     UpdateEmployeeComponent,
     CreateEmployeeComponent,
     AdminPanelComponent,
-    ViewAllDepartmentsComponent
+    ViewAllDepartmentsComponent,
+    UpdateDepartmentComponent
     
   ],
   imports: [
