@@ -1,12 +1,17 @@
 export class Department {
     idDepartment: number;
-    departmentName: string;
+    title: string;
     abbreviation: string;
   
-    constructor(idDepartment: number, title: string, abbreviation: string) {
+    constructor(
+      idDepartment: number = 0,
+      title: string = '',
+      abbreviation: string = ''
+    ) {
       this.idDepartment = idDepartment;
-      this.departmentName = title;
+      this.title = title;
       this.abbreviation = abbreviation;
+      
     }
   }
   
