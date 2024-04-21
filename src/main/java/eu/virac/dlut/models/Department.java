@@ -40,6 +40,10 @@ public class Department {
 	
 	@Column(name = "Abbreviation")
 	public String abbreviation;
+
+	@NotNull
+	@Column(name = "isDeleted")
+	private boolean isDeleted;
 	
 	//saite ar darbinieku
 	@OneToMany(mappedBy="department")
@@ -49,6 +53,7 @@ public class Department {
 	public Department(String title, String abbreviation) {
 		this.title = title;
 		this.abbreviation = abbreviation;
+		this.isDeleted = false;
 	}
 	
 	//pievieno un izņem darbinieku
