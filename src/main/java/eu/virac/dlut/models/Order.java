@@ -36,7 +36,7 @@ import lombok.ToString;
 
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table
-@Entity(name = "Order")
+@Entity(name = "OrderTable")
 @Getter @Setter @NoArgsConstructor @ToString
 public class Order {
 	

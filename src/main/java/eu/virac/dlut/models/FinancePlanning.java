@@ -61,7 +61,7 @@ public class FinancePlanning {
 	@JoinColumn(name = "idEmployeeFinancePlanning", referencedColumnName = "idEmployee"/*, nullable = false*/)
 	private Employee employee;
 	
-	@Column(name = "YearMonth")
+	@Column(name = "FinYearMonth")
 	//@DateTimeFormat(pattern = "MM.yyyy.") //
 	//private YearMonth yearMonth;
 	@DateTimeFormat(pattern = "dd.MM.yyyy.")
