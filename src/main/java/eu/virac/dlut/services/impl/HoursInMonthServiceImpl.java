@@ -2,6 +2,7 @@ package eu.virac.dlut.services.impl;
 
 import java.util.ArrayList;
 
+import eu.virac.dlut.models.helpers.HoursInMonthDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,18 @@ public class HoursInMonthServiceImpl implements IHoursInMonthService{
 		if(h != null)
 			return h;
 		
-		throw new Exception("Hours in month and year not foud!");
+		throw new Exception("Hours in month and year not found!");
+	}
+
+	@Override
+	public HoursInMonthDTO insertHoursInMonthDTO(HoursInMonthDTO hoursInMonthDTO) throws Exception {
+		HoursInMonth existingHoursInMonth = hoursInMonthRepo.findByYearAndMonth(hoursInMonthDTO.getYear(), hoursInMonthDTO.getMonth());
+		if (existingHoursInMonth != null) {
+			throw new Exception("Hours for this month and year have already been submitted.");
+		}
+		HoursInMonth hoursInMonth = new HoursInMonth(hoursInMonthDTO.getYear(), hoursInMonthDTO.getMonth(), hoursInMonthDTO.getHoursInMonth());
+		hoursInMonthRepo.save(hoursInMonth);
+		hoursInMonthDTO.setIdHoursInMonth(hoursInMonth.getIdHoursInMonth());
+		return hoursInMonthDTO;
 	}
 }

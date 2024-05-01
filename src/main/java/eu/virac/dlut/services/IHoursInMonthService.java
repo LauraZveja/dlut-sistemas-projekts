@@ -3,6 +3,7 @@ package eu.virac.dlut.services;
 import java.util.ArrayList;
 
 import eu.virac.dlut.models.HoursInMonth;
+import eu.virac.dlut.models.helpers.HoursInMonthDTO;
 
 public interface IHoursInMonthService {
 	
@@ -13,4 +14,6 @@ public interface IHoursInMonthService {
 	ArrayList<HoursInMonth> selectAllHoursInMonths();
 
 	HoursInMonth selectHoursInMonthByYearAndMonth(int year, int month) throws Exception;
+
+	HoursInMonthDTO insertHoursInMonthDTO(HoursInMonthDTO hoursInMonthDTO) throws Exception;
 }
