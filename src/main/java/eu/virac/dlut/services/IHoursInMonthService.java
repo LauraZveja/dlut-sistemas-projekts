@@ -16,4 +16,14 @@ public interface IHoursInMonthService {
 	HoursInMonth selectHoursInMonthByYearAndMonth(int year, int month) throws Exception;
 
 	HoursInMonthDTO insertHoursInMonthDTO(HoursInMonthDTO hoursInMonthDTO) throws Exception;
+
+	ArrayList<HoursInMonthDTO> retrieveAllHoursInMonthDTO();
+
+	HoursInMonthDTO updateHoursInMonthDTO(HoursInMonthDTO hoursInMonthDTO) throws Exception;
+
+	void deleteHoursInMonthDTO(HoursInMonthDTO hoursInMonthDTO);
+
+	HoursInMonthDTO selectHoursInMonthByYearAndMonthDTO(int year, int month) throws Exception;
+
+	ArrayList<HoursInMonthDTO> selectAllHoursInYear(int year);
 }

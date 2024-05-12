@@ -25,7 +25,8 @@ public class HoursInMonthDTO {
     @NotNull
     private double hoursInMonth;
 
-    public HoursInMonthDTO(int year, int month, double hoursInMonth) {
+    public HoursInMonthDTO(int idHoursInMonth, int year, int month, double hoursInMonth) {
+        this.idHoursInMonth = idHoursInMonth;
         this.year = year;
         this.month = month;
         this.hoursInMonth = hoursInMonth;
