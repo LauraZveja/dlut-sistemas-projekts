@@ -16,6 +16,7 @@ import { UpdateDepartmentComponent } from "./components/department/update-depart
 import { ViewAllHoursComponent } from "./components/hours-in-month/view-all-hours/view-all-hours.component";
 import { UpdateHoursComponent } from "./components/hours-in-month/update-hours/update-hours.component";
 import { CreateHoursComponent } from "./components/hours-in-month/create-hours/create-hours.component";
+import { EnterAllHoursComponent } from "./components/hours-in-month/enter-all-hours/enter-all-hours.component";
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { CreateHoursComponent } from "./components/hours-in-month/create-hours/c
     CreateDepartmentComponent,
     ViewAllHoursComponent,
     UpdateHoursComponent,
-    CreateHoursComponent
+    CreateHoursComponent,
+    EnterAllHoursComponent
     
   ],
   imports: [

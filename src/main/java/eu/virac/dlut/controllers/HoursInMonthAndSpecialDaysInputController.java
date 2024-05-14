@@ -71,4 +71,14 @@ public class HoursInMonthAndSpecialDaysInputController {
         }
     }
 
+    @PostMapping("/insertHoursInYear")
+    public ResponseEntity<?> insertHoursInYear(@RequestBody @Valid ArrayList<HoursInMonthDTO> hoursInYearDTO) {
+        try {
+            ArrayList<HoursInMonthDTO> insertedHours = hoursInMonthService.insertHoursInYear(new ArrayList<>(hoursInYearDTO));
+            return new ResponseEntity<>(insertedHours, HttpStatusCode.valueOf(200));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+        }
+    }
+
 }

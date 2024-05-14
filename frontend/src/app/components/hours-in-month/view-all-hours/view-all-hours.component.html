@@ -36,6 +36,20 @@
         <div class="col-auto">
           <button type="submit" class="btn btn-outline-primary">Skatīt</button>
         </div>
+        <div class="mt-3">
+          <h4>Ievadīt darba stundas visam gadam:</h4>
+          <form class="row g-3 align-items-center" (ngSubmit)="onEnterAllHours()">
+              <div class="col-auto">
+                  <label for="inputYearForAllHours" class="col-form-label">Gads:</label>
+              </div>
+              <div class="col-auto">
+                  <input type="number" id="inputYearForAllHours" class="form-control" [(ngModel)]="inputYearForAllHours" name="yearForAllHours" required>
+              </div>
+              <div class="col-auto">
+                  <button type="submit" class="btn btn-outline-primary">Tālāk</button>
+              </div>
+          </form>
+      </div>
       </form>
     </div>
     

@@ -26,4 +26,7 @@ public interface IHoursInMonthService {
 	HoursInMonthDTO selectHoursInMonthByYearAndMonthDTO(int year, int month) throws Exception;
 
 	ArrayList<HoursInMonthDTO> selectAllHoursInYear(int year);
+
+	ArrayList<HoursInMonthDTO> insertHoursInYear (ArrayList<HoursInMonthDTO> hoursInYearDTO) throws Exception;
+
 }

@@ -11,6 +11,7 @@ import { CreateDepartmentComponent } from './components/department/create-depart
 import { ViewAllHoursComponent } from './components/hours-in-month/view-all-hours/view-all-hours.component';
 import { UpdateHoursComponent } from './components/hours-in-month/update-hours/update-hours.component';
 import { CreateHoursComponent } from './components/hours-in-month/create-hours/create-hours.component';
+import { EnterAllHoursComponent } from './components/hours-in-month/enter-all-hours/enter-all-hours.component';
 
 
 export const routes: Routes = [
@@ -26,7 +27,8 @@ export const routes: Routes = [
     { path: 'hours-in-this-year', component: ViewAllHoursComponent},
     { path: 'update-hours', component: UpdateHoursComponent},
     { path: 'create-hours', component: CreateHoursComponent},
-    { path: 'hours-in-year/:year', component: ViewAllHoursComponent }
+    { path: 'hours-in-year/:year', component: ViewAllHoursComponent },
+    { path: 'enter-all-hours', component: EnterAllHoursComponent },
 ];
 
 @NgModule({

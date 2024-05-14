@@ -134,5 +134,33 @@ public class HoursInMonthServiceImpl implements IHoursInMonthService {
         return result;
     }
 
+    @Override
+    public ArrayList<HoursInMonthDTO> insertHoursInYear(ArrayList<HoursInMonthDTO> hoursInYearDTO) throws Exception {
+        ArrayList<HoursInMonthDTO> insertedHours = new ArrayList<>();
+
+        for (HoursInMonthDTO hoursInMonthDTO : hoursInYearDTO) {
+            int year = hoursInMonthDTO.getYear();
+            int month = hoursInMonthDTO.getMonth();
+
+            if (month < 1 || month > 12) {
+                throw new IllegalArgumentException("Month must be between 1 and 12. 1 for January, 12 for December.");
+            }
+            if (year < 1994 || year > 2124) {
+                throw new IllegalArgumentException("Year must be between 1994 and 2124.");
+            }
+
+            HoursInMonth existingHoursInMonth = hoursInMonthRepo.findByYearAndMonth(year, month);
+            if (existingHoursInMonth != null) {
+                throw new Exception("Hours for this month and year have already been submitted.");
+            }
+
+            HoursInMonth hoursInMonth = new HoursInMonth(year, month, hoursInMonthDTO.getHoursInMonth());
+            hoursInMonthRepo.save(hoursInMonth);
+            hoursInMonthDTO.setIdHoursInMonth(hoursInMonth.getIdHoursInMonth());
+            insertedHours.add(hoursInMonthDTO);
+        }
+
+        return insertedHours;
+    }
 
 }

@@ -1,0 +1,21 @@
+<div class="container mt-3">
+    <h2 class="text-left">Ievadīt darba stundas visam gadam: {{ inputYear }}</h2>
+    <form (ngSubmit)="onSubmit()" class="form-horizontal">
+        <div class="mb-3">
+            <div class="col-sm-12">
+                <div *ngFor="let hours of hoursInYear; let i = index" class="mb-3 row align-items-center">
+                    <label [for]="'month-' + hours.month" class="col-sm-3 col-form-label text-left">{{ monthNames[i] }}:</label>
+                    <div class="col-sm-3">
+                        <input type="number" [id]="'month-' + hours.month" class="form-control" [(ngModel)]="hours.hoursInMonth" [name]="'hoursInMonth-' + hours.month" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <div class="col-sm-6">
+                <button type="submit" class="btn btn-outline-primary me-2">Saglabāt</button>
+                <button type="button" class="btn btn-outline-dark" (click)="goBack()">Atpakaļ</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -41,4 +41,10 @@ export class HoursInMonthService {
   getHoursInMonth(year: number, month: number): Observable<HoursInMonth> {
     return this.httpClient.get<HoursInMonth>(`${this.baseURL}/showHoursInMonth/${year}/${month}`);
   }
+
+  insertHoursInYear(hoursInYearDTO: HoursInMonth[]): Observable<Object> {
+    return this.httpClient.post(`${this.baseURL}/insertHoursInYear`, hoursInYearDTO);
+}
+
+
 }

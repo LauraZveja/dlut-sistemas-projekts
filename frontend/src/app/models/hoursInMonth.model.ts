@@ -1,5 +1,5 @@
 export class HoursInMonth {
-    idHoursInMonth: number;
+    idHoursInMonth?: number;
     year: number;
     month: number;
     hoursInMonth: number;

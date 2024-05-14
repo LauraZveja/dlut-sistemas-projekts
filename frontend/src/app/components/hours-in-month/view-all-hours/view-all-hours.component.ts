@@ -15,6 +15,7 @@ export class ViewAllHoursComponent implements OnInit {
     'jūlijs', 'augusts', 'septembris', 'oktobris', 'novembris', 'decembris'
   ];
   inputYear: number = new Date().getFullYear();
+  inputYearForAllHours: number = new Date().getFullYear() + 1;
 
   constructor(
     private hoursInMonthService: HoursInMonthService, 
@@ -82,4 +83,12 @@ export class ViewAllHoursComponent implements OnInit {
       this.deleteHours(hours);
     }
   }
+
+
+  onEnterAllHours(): void {
+    if (this.inputYearForAllHours) {
+        this.router.navigate(['/enter-all-hours'], { state: { year: this.inputYearForAllHours } });
+    }
+}
+
 }
