@@ -13,6 +13,9 @@ import { CreateDepartmentComponent } from "./components/department/create-depart
 import { RouterModule } from "@angular/router";
 import { ViewAllDepartmentsComponent } from "./components/department/view-all-departments/view-all-departments.component";
 import { UpdateDepartmentComponent } from "./components/department/update-department/update-department.component";
+import { ViewAllHoursComponent } from "./components/hours-in-month/view-all-hours/view-all-hours.component";
+import { UpdateHoursComponent } from "./components/hours-in-month/update-hours/update-hours.component";
+import { CreateHoursComponent } from "./components/hours-in-month/create-hours/create-hours.component";
 
 
 @NgModule({
@@ -25,6 +28,9 @@ import { UpdateDepartmentComponent } from "./components/department/update-depart
     ViewAllDepartmentsComponent,
     UpdateDepartmentComponent,
     CreateDepartmentComponent,
+    ViewAllHoursComponent,
+    UpdateHoursComponent,
+    CreateHoursComponent
     
   ],
   imports: [

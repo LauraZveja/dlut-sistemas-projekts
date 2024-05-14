@@ -1,0 +1,13 @@
+h2, h4 {
+    color: #006400; 
+    font-weight: bold;
+}
+
+.table thead th {
+    color: #307032;
+    font-weight: bold;
+}
+
+.container-custom {
+    max-width: 1350px; 
+}
