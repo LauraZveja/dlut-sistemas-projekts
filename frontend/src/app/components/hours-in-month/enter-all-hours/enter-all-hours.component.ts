@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { HoursInMonth } from '../../../models/hoursInMonth.model';
+import { HoursInMonthDTO } from '../../../models/hoursInMonthDTO.model';
 import { HoursInMonthService } from '../../../services/hours-in-month/hours-in-month.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { HoursInMonthService } from '../../../services/hours-in-month/hours-in-m
   styleUrls: ['./enter-all-hours.component.css']
 })
 export class EnterAllHoursComponent implements OnInit {
-  hoursInYear: HoursInMonth[] = [];
+  hoursInYear: HoursInMonthDTO[] = [];
   monthNames: string[] = [
     'Janvāris', 'Februāris', 'Marts', 'Aprīlis', 'Maijs', 'Jūnijs', 
     'Jūlijs', 'Augusts', 'Septembris', 'Oktobris', 'Novembris', 'Decembris'
@@ -36,7 +36,7 @@ export class EnterAllHoursComponent implements OnInit {
 
   initializeHoursInYear(year: number): void {
     for (let i = 1; i <= 12; i++) {
-      this.hoursInYear.push(new HoursInMonth(year, i, 0));
+      this.hoursInYear.push(new HoursInMonthDTO(year, i, 0));
     }
   }
 
@@ -47,6 +47,7 @@ export class EnterAllHoursComponent implements OnInit {
           this.router.navigate(['/hours-in-year', this.inputYear]);
         },
         error: (error) => {
+          console.log(error);
           console.error('Dati netika pievienoti:', error.message);
           alert('Dati netika pievienoti, lūdzu, mēģiniet vēlreiz.');
         }

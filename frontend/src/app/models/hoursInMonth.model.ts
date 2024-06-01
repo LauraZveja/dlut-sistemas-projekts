@@ -10,4 +10,5 @@ export class HoursInMonth {
       this.month = month;
       this.hoursInMonth = hoursInMonth;
     }
+
 }
