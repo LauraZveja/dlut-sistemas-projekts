@@ -17,6 +17,7 @@ import { ViewAllHoursComponent } from "./components/hours-in-month/view-all-hour
 import { UpdateHoursComponent } from "./components/hours-in-month/update-hours/update-hours.component";
 import { CreateHoursComponent } from "./components/hours-in-month/create-hours/create-hours.component";
 import { EnterAllHoursComponent } from "./components/hours-in-month/enter-all-hours/enter-all-hours.component";
+import { LoginComponent } from "./components/login/login.component";
 
 
 @NgModule({
@@ -32,7 +33,9 @@ import { EnterAllHoursComponent } from "./components/hours-in-month/enter-all-ho
     ViewAllHoursComponent,
     UpdateHoursComponent,
     CreateHoursComponent,
-    EnterAllHoursComponent
+    EnterAllHoursComponent,
+    LoginComponent
+    
     
   ],
   imports: [

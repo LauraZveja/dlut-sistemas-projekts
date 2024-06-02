@@ -12,10 +12,12 @@ import { ViewAllHoursComponent } from './components/hours-in-month/view-all-hour
 import { UpdateHoursComponent } from './components/hours-in-month/update-hours/update-hours.component';
 import { CreateHoursComponent } from './components/hours-in-month/create-hours/create-hours.component';
 import { EnterAllHoursComponent } from './components/hours-in-month/enter-all-hours/enter-all-hours.component';
+import { LoginComponent } from './components/login/login.component';
 
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: 'login', component: LoginComponent },
     { path: 'employees', component: ViewAllEmployeesComponent},
     { path: 'update-employee', component: UpdateEmployeeComponent },
     { path: 'create-employee', component: CreateEmployeeComponent },
