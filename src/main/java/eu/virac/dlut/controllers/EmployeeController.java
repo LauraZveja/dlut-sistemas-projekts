@@ -3,6 +3,7 @@ package eu.virac.dlut.controllers;
 import eu.virac.dlut.models.helpers.EmployeeDTO;
 import eu.virac.dlut.services.IEmployeeService;
 import eu.virac.dlut.services.IUserManageService;
+import eu.virac.dlut.utils.TokenValidationUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,40 +25,45 @@ public class EmployeeController {
     private IUserManageService userManage;
 
     @PostMapping("/addNew")
-    public ResponseEntity<?> addNewEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
-        try {
-            employeeService.insertEmployee(employeeDTO);
-            return new ResponseEntity<>(employeeDTO, HttpStatusCode.valueOf(200));
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
-        }
+    public ResponseEntity<?> addNewEmployee(@RequestHeader HttpHeaders headers, @RequestBody @Valid EmployeeDTO employeeDTO) {
+        return TokenValidationUtil.handleRequest(userManage, headers, () -> {
+            try {
+                employeeService.insertEmployee(employeeDTO);
+                return new ResponseEntity<>(employeeDTO, HttpStatusCode.valueOf(200));
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+            }
+        });
     }
 
     @GetMapping("/showAll")
     public ResponseEntity<?> showAllEmployees(@RequestHeader HttpHeaders headers) {
-        if (userManage.isUserTokenOk(headers.getFirst("token"))) {
-            return new ResponseEntity<ArrayList<EmployeeDTO>>(employeeService.retrieveAllDataForEmployees(), HttpStatusCode.valueOf(200));
-        } else
-            return new ResponseEntity<>(HttpStatusCode.valueOf(400));
+        return TokenValidationUtil.handleRequest(userManage, headers, () ->
+                new ResponseEntity<>(employeeService.retrieveAllDataForEmployees(), HttpStatusCode.valueOf(200))
+        );
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
-        try {
-            employeeService.updateEmployeeById(employeeDTO);
-            return new ResponseEntity<>(employeeDTO, HttpStatusCode.valueOf(200));
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
-        }
+    public ResponseEntity<?> updateEmployee(@RequestBody @Valid EmployeeDTO employeeDTO, @RequestHeader HttpHeaders headers) {
+        return TokenValidationUtil.handleRequest(userManage, headers, () -> {
+            try {
+                employeeService.updateEmployeeById(employeeDTO);
+                return new ResponseEntity<>(employeeDTO, HttpStatusCode.valueOf(200));
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+            }
+        });
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteEmployee(@RequestBody @Valid EmployeeDTO employeeDTO) {
-        try {
-            employeeService.deleteEmployeeById(employeeDTO);
-            return new ResponseEntity<>(employeeService.retrieveAllDataForEmployees(), HttpStatusCode.valueOf(200));
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
-        }
+    public ResponseEntity<?> deleteEmployee(@RequestHeader HttpHeaders headers, @RequestBody @Valid EmployeeDTO employeeDTO) {
+        return TokenValidationUtil.handleRequest(userManage, headers, () -> {
+            try {
+                employeeService.deleteEmployeeById(employeeDTO);
+                return new ResponseEntity<>(employeeService.retrieveAllDataForEmployees(), HttpStatusCode.valueOf(200));
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+            }
+        });
     }
 }

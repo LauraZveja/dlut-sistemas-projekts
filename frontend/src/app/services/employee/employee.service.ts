@@ -22,23 +22,23 @@ export class EmployeeService {
 
   getEmployeesList(): Observable<Employee[]> {
     const headers = this.getHeader();
-    console.log("Headeri:", headers);
     return this.httpClient.get<Employee[]>(`${this.baseURL}/showAll`, { headers});
   }
 
   createEmployee(employee: Employee): Observable<Object> {
-    return this.httpClient.post(`${this.baseURL}/addNew`, employee);
+    const headers = this.getHeader();
+    return this.httpClient.post(`${this.baseURL}/addNew`, employee, { headers});
   }
 
   updateEmployee(employee: Employee): Observable<Object> {
-    return this.httpClient.put(`${this.baseURL}/update`, employee);
+    const headers = this.getHeader();
+    return this.httpClient.put(`${this.baseURL}/update`, employee, { headers});
   }
 
   deleteEmployee(employee: Employee): Observable<Object> {
+    const headers = this.getHeader();
     const options = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
+      headers: headers,
       body: employee,
     };
     return this.httpClient.delete(`${this.baseURL}/delete`, options);
