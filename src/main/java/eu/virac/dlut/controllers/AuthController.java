@@ -1,8 +1,8 @@
 package eu.virac.dlut.controllers;
 
 import eu.virac.dlut.models.helpers.LoginDTO;
+import eu.virac.dlut.services.IUserManageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.ldap.userdetails.LdapUserDetailsImpl;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,9 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private IUserManageService userManage;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
         try {
@@ -27,7 +31,10 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return new ResponseEntity<>("Login successful", HttpStatusCode.valueOf(200));
+
+            String token = userManage.saveUserToken(((LdapUserDetailsImpl) authentication.getPrincipal()).getDn());
+
+            return new ResponseEntity<>(token, HttpStatusCode.valueOf(200));
         } catch (AuthenticationException e) {
             return new ResponseEntity<>("Login failed", HttpStatusCode.valueOf(401));
         }

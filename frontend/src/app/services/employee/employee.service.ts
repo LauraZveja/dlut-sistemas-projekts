@@ -2,16 +2,28 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Employee } from '../../models/employee.model';
+import { UserService } from '../../services/user/user.service';
+
+
 @Injectable({
   providedIn: 'root',
 })
 export class EmployeeService {
   private baseURL = 'http://localhost:8080/dlut/employee';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private userService: UserService) {}
+
+
+  getHeader(){
+    return new HttpHeaders({
+      'token': this.userService.getUserToken(),
+    });
+  }
 
   getEmployeesList(): Observable<Employee[]> {
-    return this.httpClient.get<Employee[]>(`${this.baseURL}/showAll`);
+    const headers = this.getHeader();
+    console.log("Headeri:", headers);
+    return this.httpClient.get<Employee[]>(`${this.baseURL}/showAll`, { headers});
   }
 
   createEmployee(employee: Employee): Observable<Object> {

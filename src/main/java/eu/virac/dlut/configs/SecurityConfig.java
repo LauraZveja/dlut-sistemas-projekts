@@ -11,15 +11,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.ldap.LdapBindAuthenticationManagerFactory;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableWebSecurity
+@CrossOrigin(origins = "http://localhost:4200")
 public class SecurityConfig {
     @Value("${spring.ldap.urls}")
     private String ldapUrls;
@@ -35,9 +35,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login", "/api/auth/**").permitAll()
+                        .requestMatchers("/login", "/api/auth/login","/dlut/employee/*", "/dlut/department/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
@@ -46,7 +47,7 @@ public class SecurityConfig {
                             CorsConfiguration config = new CorsConfiguration();
                             config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
                             config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                            config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+                            config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "token"));
                             config.setAllowCredentials(true);
                             return config;
                         })
@@ -83,5 +84,6 @@ public class SecurityConfig {
 
         return contextSource;
     }
+
 
 }

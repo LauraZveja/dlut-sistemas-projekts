@@ -1,29 +1,25 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth/auth.service';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-@Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
-})
-export class LoginComponent {
-  username: string = '';
-  password: string = '';
+import {LoginComponent} from './login.component';
 
-  constructor(private router: Router, private authService: AuthService) {}
+describe('LoginComponent', () => {
+  let component: LoginComponent;
+  let fixture: ComponentFixture<LoginComponent>;
 
-  onSubmit() {
-    this.authService.login(this.username, this.password).subscribe(response => {
-      this.router.navigate(['/home']);
-    }, error => {
-      console.error('Login failed', error);
-    });
-  }
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [LoginComponent]
+    })
+      .compileComponents();
+  });
 
-  logout() {
-    this.authService.logout().subscribe(() => {
-      this.router.navigate(['/login']);
-    });
-  }
-}
+  beforeEach(() => {
+    fixture = TestBed.createComponent(LoginComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
