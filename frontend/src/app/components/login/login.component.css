@@ -1,0 +1,62 @@
+h2 {
+    color: #006400; 
+    font-weight: bold;
+}
+
+.table thead th {
+    color: #307032;
+    font-weight: bold;
+}
+
+.container-custom {
+    max-width: 1350px; 
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-form .form-group {
+    margin-bottom: 15px;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.login-form .form-control {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-form .btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #307032;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.login-form .btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
