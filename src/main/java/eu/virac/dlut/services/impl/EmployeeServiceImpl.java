@@ -50,9 +50,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	@Override
 	public Employee selectOneEmployeeById(int employeeId) throws Exception {
 		Employee employee = employeeRepo.findById(employeeId)
-				.orElseThrow(() -> new Exception("Darbinieks nav atrasts."));
+				.orElseThrow(() -> new Exception("Employee not found"));
 		if (employee.isDeleted()) {
-			throw new Exception("Darbinieks ir dzēsts.");
+			throw new Exception("Employee is deleted.");
 		}
 		return employee;
 	}
@@ -86,7 +86,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
 			employeeDTO.setIdEmployee(employee.getIdEmployee());
 			return employeeDTO;
 		} else {
-			throw new Exception("Nepareizs departamenta nosaukums / darbinieks jau eksistē datubāzē");
+			throw new Exception("Department not found or employee with this work contract number already exists.");
 		}
 	}
 
