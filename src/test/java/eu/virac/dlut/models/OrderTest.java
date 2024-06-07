@@ -43,39 +43,29 @@ class OrderTest {
     }
 
     @Test
-    void testSetOrderNo() {
+    void testSettersOrderTest() {
         order.setOrderNo(newOrderNo);
-        assertEquals(newOrderNo, order.getOrderNo());
-    }
-
-    @Test
-    void testSetDate() {
         order.setDate(newDate);
-        assertEquals(newDate, order.getDate());
-    }
-
-    @Test
-    void testSetStartDate() {
         order.setStartDate(newStartDate);
-        assertEquals(newStartDate, order.getStartDate());
-    }
-
-    @Test
-    void testSetEndDate() {
         order.setEndDate(newEndDate);
-        assertEquals(newEndDate, order.getEndDate());
-    }
-
-    @Test
-    void testSetDesignation() {
         order.setDesignation(designation);
+        order.setEmployee(newEmployee);
+
+        assertEquals(newOrderNo, order.getOrderNo());
+        assertEquals(newDate, order.getDate());
+        assertEquals(newStartDate, order.getStartDate());
+        assertEquals(newEndDate, order.getEndDate());
         assertEquals(designation, order.getDesignation());
+        assertEquals(newEmployee, order.getEmployee());
     }
 
     @Test
-    void testSetEmployee() {
-        order.setEmployee(newEmployee);
-        assertEquals(newEmployee, order.getEmployee());
+    void testGettersOrderTest() {
+        assertEquals(orderNo, orderWithoutEndDate.getOrderNo());
+        assertEquals(date, orderWithoutEndDate.getDate());
+        assertEquals(startDate, orderWithoutEndDate.getStartDate());
+        assertEquals(employee, orderWithoutEndDate.getEmployee());
+        assertNull(orderWithoutEndDate.getEndDate());
     }
 
     @Test
