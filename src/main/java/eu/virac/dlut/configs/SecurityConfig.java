@@ -22,7 +22,7 @@ import java.util.Collections;
 @CrossOrigin(origins = "http://localhost:4200")
 public class SecurityConfig {
 
-    @Value("${custom.login.path:/login}")
+    @Value("${custom.login.path}")
     private String loginPath;
 
     @Value("${spring.ldap.urls}")

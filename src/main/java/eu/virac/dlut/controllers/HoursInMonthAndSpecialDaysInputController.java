@@ -90,7 +90,7 @@ public class HoursInMonthAndSpecialDaysInputController {
     }
 
     @PostMapping("/insertHoursInYear")
-    public ResponseEntity<Object> insertHoursInYear(@RequestHeader HttpHeaders headers, @RequestBody @Valid ArrayList<HoursInMonthDTO> hoursInYearDTO) {
+    public ResponseEntity<Object> insertHoursInYear(@RequestHeader HttpHeaders headers, @RequestBody @Valid List<HoursInMonthDTO> hoursInYearDTO) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 List<HoursInMonthDTO> insertedHours = hoursInMonthService.insertHoursInYear(new ArrayList<>(hoursInYearDTO));
