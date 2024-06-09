@@ -1,8 +1,6 @@
 package eu.virac.dlut.models;
 
 import java.time.LocalDate;
-import java.time.Year;
-import java.time.YearMonth;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

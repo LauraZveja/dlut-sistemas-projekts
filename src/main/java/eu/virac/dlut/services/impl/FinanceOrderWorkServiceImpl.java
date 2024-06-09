@@ -1,7 +1,5 @@
 package eu.virac.dlut.services.impl;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +13,6 @@ public class FinanceOrderWorkServiceImpl implements IFinanceOrderWorkService{
 	@Autowired
 	IFinanceOrderWorkRepo finOrdWorkRepo;
 
-//	@Override
-//	public String selectPositionInProjectForEmployee(int employeeId, int projectId) {
-//		String res = finOrdWorkRepo.getPositionInProjectForEmployee(employeeId, projectId);	
-//		return res;
-//	}
 	@Override
 	public String selectPositionInProjectForEmployee(int employeeId, int projectId) {
 		String res = finOrdWorkRepo.getPositionInProjectForEmployee(employeeId, projectId);	

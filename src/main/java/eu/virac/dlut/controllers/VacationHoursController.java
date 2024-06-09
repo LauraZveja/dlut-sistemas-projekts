@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import eu.virac.dlut.models.Employee;
 import eu.virac.dlut.models.FinanceSource;
 import eu.virac.dlut.models.FullTimeEquivalent;
-import eu.virac.dlut.models.helpers.EmployeeAndHourDTO;
 import eu.virac.dlut.repos.IEmployeeRepo;
 import eu.virac.dlut.repos.IFinanceSourceRepo;
 import eu.virac.dlut.repos.IFullTimeEquivalentRepo;
@@ -82,7 +81,6 @@ public class VacationHoursController {
 	public String postVacationHoursUpdate(@PathVariable("year") int year, @PathVariable("month") int month,
 			@PathVariable("idfs") int finSourceId, @PathVariable("idempl") int emplId, Model model, @Valid FullTimeEquivalent fte, BindingResult res) {
 		if (!res.hasErrors()) {
-			//fullTimeEquivalentService.updateVacationHoursByYearMonthFinSourceEmployee(year, month, finSourceId, emplId, fte);
 		fullTimeEquivalentService.updateVacationHoursByYearMonthFinSourceEmployeeFromEditEmployee(year, month, emplId, finSourceId, fte.getVacationHours());
 			
 				return "redirect:/dlut/tabele/eksportet/finansejuma-avots/"+ year + "/" + month + "/" + finSourceId;

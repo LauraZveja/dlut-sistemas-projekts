@@ -19,9 +19,10 @@ import eu.virac.dlut.models.AcademicWorkLoad;
 import eu.virac.dlut.models.BaseFin;
 import eu.virac.dlut.models.Employee;
 import eu.virac.dlut.models.FinanceSource;
-import eu.virac.dlut.models.FullTimeEquivalent;
 import eu.virac.dlut.models.HoursInMonth;
 import eu.virac.dlut.models.Project;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import eu.virac.dlut.models.helpers.EmployeeAndHourDTO;
 import eu.virac.dlut.repos.IEmployeeTimeSheetRepo;
 import eu.virac.dlut.services.IEmployeeService;
@@ -34,6 +35,7 @@ import eu.virac.dlut.services.ITableExportService;
 
 @Controller
 public class TableExportController {
+	private static final Logger logger = Logger.getLogger(TableExportController.class.getName());
 
 	@Autowired
 	ITableExportService tableExportService;
@@ -91,8 +93,7 @@ public class TableExportController {
 			HoursInMonth h = hoursInMonthService.selectHoursInMonthByYearAndMonth(year, month);
 			workHoursThisMonth = h.getHoursInMonth();
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.log(Level.WARNING, "Error: ", e1);
 		}
 
 		// mēneša attēlojumam virsrakstā
@@ -178,8 +179,6 @@ public class TableExportController {
 				return "no-results";
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			return "no-results";
 		}
 

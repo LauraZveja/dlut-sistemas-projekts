@@ -2,8 +2,6 @@ package eu.virac.dlut.services.impl;
 
 import java.util.ArrayList;
 
-import eu.virac.dlut.models.Employee;
-import eu.virac.dlut.models.helpers.EmployeeDTO;
 import eu.virac.dlut.models.helpers.HoursInMonthDTO;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

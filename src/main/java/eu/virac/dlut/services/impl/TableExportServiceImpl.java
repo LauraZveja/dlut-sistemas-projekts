@@ -4,27 +4,20 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.collections4.map.LinkedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import eu.virac.dlut.models.AcademicWorkLoad;
 import eu.virac.dlut.models.BaseFin;
-import eu.virac.dlut.models.Department;
 import eu.virac.dlut.models.Employee;
 import eu.virac.dlut.models.EmployeeTimeSheet;
-import eu.virac.dlut.models.FinanceOrderWork;
 import eu.virac.dlut.models.FinanceSource;
 import eu.virac.dlut.models.FullTimeEquivalent;
 import eu.virac.dlut.models.IndirectVUAS;
-import eu.virac.dlut.models.OrderWork;
 import eu.virac.dlut.models.Project;
-import eu.virac.dlut.models.ProjectCategory;
-import eu.virac.dlut.models.ProjectCharacter;
 import eu.virac.dlut.models.helpers.EmployeeAndHourDTO;
 import eu.virac.dlut.repos.IAcademicWorkLoadRepo;
 import eu.virac.dlut.repos.IBaseFinRepo;
@@ -45,10 +38,6 @@ import eu.virac.dlut.services.IOrderVacationService;
 import eu.virac.dlut.services.IProjectService;
 import eu.virac.dlut.services.ITableExportService;
 
-/**
- * @author elina
- *
- */
 @Service
 public class TableExportServiceImpl implements ITableExportService {
 
@@ -348,32 +337,11 @@ public class TableExportServiceImpl implements ITableExportService {
 
 	@Override
 	public int determineDaysInMonth(int year, int month) {
-//		int yearInt = parseStringToInteger(year);
-//		int monthInt  = parseStringToInteger(month);
 		YearMonth yearMonthObject = YearMonth.of(year, month);
 		int daysInMonth = yearMonthObject.lengthOfMonth(); // 28-31
 		return daysInMonth;
 	}
 
-	
-	//vienam darbiniekam visi finansu avoti
-	//gads, meenesis, darbinieka id
-	//darbinieks - darba riikojums - finance_order_work un tur ari id_project/id_base_fin/id_ac_work_load/id_indirectvuas
-	//employee_time_sheet ir id_fin_order_work;
-	
-	/*
-	@Override
-	public ArrayList<Project> selectAllProjectsOneEmployeeInYearAndMonth(int year, int month, int employeeId) {
-		//ArrayList<FinanceSource> allProjects = new ArrayList<>();
-		ArrayList<Project> res = projectService.selectAllProjectsForOneEmployeeInSpecificMonth(year, month, employeeId);
-		
-//		for(FinanceSource fs : res) 
-//			allProjects.add(fs);
-		
-		return res;
-	}
-	*/
-	
 	@Override
 	public ArrayList<FinanceSource> selectAllOtherFinanceSourcesForOneEmployeeInSpecificYearAndMonth(int year, int month, int employeeId) {
 		ArrayList<FinanceSource> allFinSources = new ArrayList<>();
@@ -396,22 +364,7 @@ public class TableExportServiceImpl implements ITableExportService {
 		
 		return allFinSources;
 	}
-	
-	/*
-	@Override
-	public ArrayList<EmployeeAndHourDTO> selectDataEmployeeInProjectsInMonthAndYear(int year, int month, int employeeId) throws Exception {
-		ArrayList<EmployeeAndHourDTO> results = new ArrayList<>();
-		
-		ArrayList<Project> list = selectAllProjectsOneEmployeeInYearAndMonth(year, month, employeeId);
-		
-		for (Project temp : list) {
-				EmployeeAndHourDTO oneRes = makeDTOForEmployeeInProjectsInSpecificMonth(year, month, employeeId, temp.getIdFinSource());
-				results.add(oneRes);
-	}
-		return results;
-	}
-	*/
-	
+
 	@Override
 	public ArrayList<EmployeeAndHourDTO> selectNecessaryDataForEmployeeInAllOtherFinanceSourcesInOneMonth(int year, int month, int employeeId) throws Exception {
 		ArrayList<FinanceSource> finSources = selectAllOtherFinanceSourcesForOneEmployeeInSpecificYearAndMonth(year, month, employeeId);
@@ -1020,31 +973,12 @@ public class TableExportServiceImpl implements ITableExportService {
 	}
 		return dayAndHours;
 	}
-	
-//	@Override
-//	public int countAnnulVacationDaysInAllFinSources(ArrayList<EmployeeAndHourDTO> resList) {
-//		int countAIDays = 0;
-//		for (EmployeeAndHourDTO temp : resList) {
-//				countAIDays += temp.getVacationAnnualDays();
-//		}
-//		return countAIDays;
-//	}
-	
+
 	@Override
 	public double sumAllHoursWorked(Map<Integer, Double> resMap) {
 		double sumAllHoursWorked = resMap.values().stream().mapToDouble(d -> d).sum();
 
 		return sumAllHoursWorked;
 	}
-	
-//	@Override
-//	public int sumAllDaysWorked(ArrayList<EmployeeAndHourDTO> resList) {
-//		int sumAllDaysWorked = 0;
-//		for (EmployeeAndHourDTO temp : resList) {
-//			sumAllDaysWorked += temp.getHours().size();
-//	}
-//		return sumAllDaysWorked;
-//	}
-	
 
 }

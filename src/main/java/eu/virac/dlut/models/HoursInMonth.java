@@ -1,7 +1,5 @@
 package eu.virac.dlut.models;
 
-import java.util.Collection;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

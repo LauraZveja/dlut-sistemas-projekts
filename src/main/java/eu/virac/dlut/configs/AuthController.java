@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final IUserManageService userManage;
 
     @Autowired
-    private IUserManageService userManage;
+    public AuthController(AuthenticationManager authenticationManager, IUserManageService userManage) {
+        this.authenticationManager = authenticationManager;
+        this.userManage = userManage;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
