@@ -46,7 +46,7 @@ public class HoursInMonthServiceImpl implements IHoursInMonthService {
             hoursInMonthRepo.save(hEdit);
             return hEdit;
         } else
-            throw new Exception("Id nav pareizs");
+            throw new Exception("ID not found!");
     }
 
     @Override

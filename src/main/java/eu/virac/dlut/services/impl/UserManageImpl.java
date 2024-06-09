@@ -11,13 +11,16 @@ import org.springframework.stereotype.Service;
 import eu.virac.dlut.models.UserToken;
 import eu.virac.dlut.repos.IUserTokenRepo;
 import eu.virac.dlut.services.IUserManageService;
+import org.springframework.beans.factory.annotation.Value;
+
 
 @Service
 public class UserManageImpl implements IUserManageService {
     @Autowired
     private IUserTokenRepo tokenRepo;
     private static final long EXPIRATION_TIME = 864_000_000;
-    private static final String SECRET_KEY = "DLUT2024_8h4274j234b3lu4&^$KN(";
+    @Value("${secret.key}")
+    private String secretKey;
 
     @Override
     public String saveUserToken(String userDn) {
@@ -52,7 +55,7 @@ public class UserManageImpl implements IUserManageService {
 
     @Override
     public String getToken(String userDn) {
-        return Base64.getEncoder().encodeToString((new SecretKeySpec(SECRET_KEY.getBytes(), "HmacSHA256")).getEncoded());
+        return Base64.getEncoder().encodeToString((new SecretKeySpec(secretKey.getBytes(), "HmacSHA256")).getEncoded());
     }
 
 

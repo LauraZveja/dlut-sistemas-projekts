@@ -21,7 +21,7 @@ public class DepartmentServiceImpl implements IDepartmentService {
     public DepartmentDTO insertDepartment(DepartmentDTO departmentDTO) throws Exception {
         Department existingDepartment = departmentRepo.findByTitle(departmentDTO.getTitle());
         if (existingDepartment != null) {
-            throw new Exception("Departaments ar šādu nosaukumu jau eksistē");
+            throw new Exception("Department with this title already exists");
         }
         Department department = new Department(departmentDTO.getTitle(), departmentDTO.getAbbreviation());
         departmentRepo.save(department);
@@ -45,7 +45,7 @@ public class DepartmentServiceImpl implements IDepartmentService {
     @Override
     public DepartmentDTO updateDepartmentById(DepartmentDTO departmentDTO) throws Exception {
         Department department = departmentRepo.findById(departmentDTO.getIdDepartment())
-                .orElseThrow(() -> new EntityNotFoundException("Šāds departaments nav atrasts"));
+                .orElseThrow(() -> new EntityNotFoundException("Department not found"));
 
         boolean isUpdated = false;
 
