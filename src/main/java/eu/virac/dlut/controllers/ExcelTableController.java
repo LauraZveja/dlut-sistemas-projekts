@@ -39,7 +39,7 @@ public class ExcelTableController {
     }
 
     @GetMapping("/dlut/tabele/eksportet/darbinieks/excel/{year}/{month}/{id}")
-    public ResponseEntity<?> createExcelEmployee(@PathVariable("year") int year, @PathVariable("month") int month,
+    public ResponseEntity<Object> createExcelEmployee(@PathVariable("year") int year, @PathVariable("month") int month,
                                                  @PathVariable("id") int employeeId) {
 
         try (Workbook workbook = excelCreatorService.createEmployeeExcel(employeeId, year, month);

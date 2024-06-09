@@ -25,7 +25,7 @@ public class HoursInMonthAndSpecialDaysInputController {
     IUserManageService userManage;
 
     @PostMapping("/insertHoursInMonth")
-    public ResponseEntity<?> insertHoursInMonth(@RequestHeader HttpHeaders headers, @RequestBody @Valid HoursInMonthDTO hoursInMonthDTO) {
+    public ResponseEntity<Object> insertHoursInMonth(@RequestHeader HttpHeaders headers, @RequestBody @Valid HoursInMonthDTO hoursInMonthDTO) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 hoursInMonthService.insertHoursInMonthDTO(hoursInMonthDTO);
@@ -37,7 +37,7 @@ public class HoursInMonthAndSpecialDaysInputController {
     }
 
     @GetMapping("/showHoursInYear/{year}")
-    public ResponseEntity<?> getShowAllHoursInYear(@RequestHeader HttpHeaders headers, @PathVariable int year) {
+    public ResponseEntity<Object> getShowAllHoursInYear(@RequestHeader HttpHeaders headers, @PathVariable int year) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 ArrayList<HoursInMonthDTO> hoursInMonthDTOs = hoursInMonthService.selectAllHoursInYear(year);
@@ -49,7 +49,7 @@ public class HoursInMonthAndSpecialDaysInputController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteHoursInMonth(@RequestHeader HttpHeaders headers, @RequestBody @Valid HoursInMonthDTO hoursInMonthDTO) {
+    public ResponseEntity<Object> deleteHoursInMonth(@RequestHeader HttpHeaders headers, @RequestBody @Valid HoursInMonthDTO hoursInMonthDTO) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 int year = hoursInMonthDTO.getYear();
@@ -62,7 +62,7 @@ public class HoursInMonthAndSpecialDaysInputController {
     }
 
     @GetMapping("/showHoursInMonth/{year}/{month}")
-    public ResponseEntity<?> getShowHoursInMonth(@RequestHeader HttpHeaders headers, @PathVariable int year, @PathVariable int month) {
+    public ResponseEntity<Object> getShowHoursInMonth(@RequestHeader HttpHeaders headers, @PathVariable int year, @PathVariable int month) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 HoursInMonthDTO hoursInMonthDTO = hoursInMonthService.selectHoursInMonthByYearAndMonthDTO(year, month);
@@ -74,7 +74,7 @@ public class HoursInMonthAndSpecialDaysInputController {
     }
 
     @PutMapping("/updateHoursInMonth")
-    public ResponseEntity<?> updateHoursInMonth(@RequestHeader HttpHeaders headers, @RequestBody @Valid HoursInMonthDTO hoursInMonthDTO) {
+    public ResponseEntity<Object> updateHoursInMonth(@RequestHeader HttpHeaders headers, @RequestBody @Valid HoursInMonthDTO hoursInMonthDTO) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 hoursInMonthService.updateHoursInMonthDTO(hoursInMonthDTO);
@@ -86,7 +86,7 @@ public class HoursInMonthAndSpecialDaysInputController {
     }
 
     @PostMapping("/insertHoursInYear")
-    public ResponseEntity<?> insertHoursInYear(@RequestHeader HttpHeaders headers, @RequestBody @Valid ArrayList<HoursInMonthDTO> hoursInYearDTO) {
+    public ResponseEntity<Object> insertHoursInYear(@RequestHeader HttpHeaders headers, @RequestBody @Valid ArrayList<HoursInMonthDTO> hoursInYearDTO) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 ArrayList<HoursInMonthDTO> insertedHours = hoursInMonthService.insertHoursInYear(new ArrayList<>(hoursInYearDTO));

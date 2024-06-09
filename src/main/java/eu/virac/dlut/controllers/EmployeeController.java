@@ -22,7 +22,7 @@ public class EmployeeController {
     private IUserManageService userManage;
 
     @PostMapping("/addNew")
-    public ResponseEntity<?> addNewEmployee(@RequestHeader HttpHeaders headers, @RequestBody @Valid EmployeeDTO employeeDTO) {
+    public ResponseEntity<Object> addNewEmployee(@RequestHeader HttpHeaders headers, @RequestBody @Valid EmployeeDTO employeeDTO) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 employeeService.insertEmployee(employeeDTO);
@@ -34,14 +34,14 @@ public class EmployeeController {
     }
 
     @GetMapping("/showAll")
-    public ResponseEntity<?> showAllEmployees(@RequestHeader HttpHeaders headers) {
+    public ResponseEntity<Object> showAllEmployees(@RequestHeader HttpHeaders headers) {
         return TokenValidationUtil.handleRequest(userManage, headers, () ->
                 new ResponseEntity<>(employeeService.retrieveAllDataForEmployees(), HttpStatusCode.valueOf(200))
         );
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateEmployee(@RequestBody @Valid EmployeeDTO employeeDTO, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<Object> updateEmployee(@RequestBody @Valid EmployeeDTO employeeDTO, @RequestHeader HttpHeaders headers) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 employeeService.updateEmployeeById(employeeDTO);
@@ -53,7 +53,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteEmployee(@RequestHeader HttpHeaders headers, @RequestBody @Valid EmployeeDTO employeeDTO) {
+    public ResponseEntity<Object> deleteEmployee(@RequestHeader HttpHeaders headers, @RequestBody @Valid EmployeeDTO employeeDTO) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 employeeService.deleteEmployeeById(employeeDTO);

@@ -77,7 +77,7 @@ public class EmployeeTableExportController {
     }
 
     @GetMapping("dlut/tabele/eksportet/darbinieks/{year}/{month}/{idempl}")
-    public ResponseEntity<?> getFinanceSourceTableExportResults(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("idempl") int employeeId) {
+    public ResponseEntity<Object> getFinanceSourceTableExportResults(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("idempl") int employeeId) {
 
         Map<Integer, String> monthNumberAndName = new HashedMap<>();
         // mēneša attēlojumam virsrakstā
@@ -141,7 +141,7 @@ public class EmployeeTableExportController {
 
     //rediģēšanai
     @GetMapping("dlut/tabele/rediget/darbinieks/{year}/{month}/{idempl}")
-    public ResponseEntity<?> getEmployeeTableExportResultsForEditing(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("idempl") int employeeId) {
+    public ResponseEntity<Object> getEmployeeTableExportResultsForEditing(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("idempl") int employeeId) {
 
         List<EmployeeAndHourDTO> results = new ArrayList<>();
         // mēneša attēlojumam virsrakstā
