@@ -74,7 +74,7 @@ class DepartmentServiceImplTest {
             departmentService.insertDepartment(departmentDTO);
         });
 
-        assertEquals("Departaments ar šādu nosaukumu jau eksistē", exception.getMessage());
+        assertEquals("Department with this title already exists", exception.getMessage());
         verify(departmentRepo, times(0)).save(any(Department.class));
     }
 
@@ -114,7 +114,7 @@ class DepartmentServiceImplTest {
             departmentService.updateDepartmentById(departmentDTO);
         });
 
-        assertEquals("Šāds departaments nav atrasts", exception.getMessage());
+        assertEquals("Department not found", exception.getMessage());
         verify(departmentRepo, times(0)).save(any(Department.class));
     }
 
