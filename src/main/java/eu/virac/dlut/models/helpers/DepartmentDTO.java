@@ -1,6 +1,5 @@
 package eu.virac.dlut.models.helpers;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

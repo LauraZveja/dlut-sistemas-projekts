@@ -1,72 +1,104 @@
 package eu.virac.dlut.controllers;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.List;
 
+import eu.virac.dlut.models.helpers.HoursInMonthDTO;
+import eu.virac.dlut.services.IUserManageService;
+import eu.virac.dlut.utils.TokenValidationUtil;
 import jakarta.validation.Valid;
-
-import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-
-import eu.virac.dlut.models.HoursInMonth;
-import eu.virac.dlut.repos.IHoursInMonthRepo;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import eu.virac.dlut.services.IHoursInMonthService;
 
-@Controller
+@CrossOrigin(origins = "http://localhost:4200")
+@RestController
+@RequestMapping("/dlut/table")
 public class HoursInMonthAndSpecialDaysInputController {
-	
+
+	private final IHoursInMonthService hoursInMonthService;
+	private final IUserManageService userManage;
+
 	@Autowired
-	IHoursInMonthService hoursInMonthService;
-	
-	@GetMapping("dlut/tabele/ievadit/darba-stundas") 
-	String getWorkHoursInMonthInput (Model model) {
-		String[] yearOptions = {"2020", "2021", "2022"};
-		String[] monthOptions = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" };
-		
-		model.addAttribute("years", yearOptions);
-		model.addAttribute("month", monthOptions);
-		
-		return "input-work-hours";
+	public HoursInMonthAndSpecialDaysInputController(IHoursInMonthService hoursInMonthService, IUserManageService userManage) {
+		this.hoursInMonthService = hoursInMonthService;
+		this.userManage = userManage;
 	}
 
-	@PostMapping("dlut/tabele/ievadit/darba-stundas") 
-	String postWorkHoursInMonthInput (@RequestParam(value = "year") int year, 
-			@RequestParam(value = "month") int month,
-			@RequestParam(value = "workHoursInMonth") int workHoursInMonth, @Valid HoursInMonth hoursInMonth, BindingResult result) {
+    @PostMapping("/insertHoursInMonth")
+    public ResponseEntity<Object> insertHoursInMonth(@RequestHeader HttpHeaders headers, @RequestBody @Valid HoursInMonthDTO hoursInMonthDTO) {
+        return TokenValidationUtil.handleRequest(userManage, headers, () -> {
+            try {
+                hoursInMonthService.insertHoursInMonthDTO(hoursInMonthDTO);
+                return new ResponseEntity<>(hoursInMonthDTO, HttpStatusCode.valueOf(200));
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+            }
+        });
+    }
 
-		if (!result.hasErrors()) {
-			try {
-				hoursInMonthService.insertHoursInMonth(year, month, workHoursInMonth);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+    @GetMapping("/showHoursInYear/{year}")
+    public ResponseEntity<Object> getShowAllHoursInYear(@RequestHeader HttpHeaders headers, @PathVariable int year) {
+        return TokenValidationUtil.handleRequest(userManage, headers, () -> {
+            try {
+                ArrayList<HoursInMonthDTO> hoursInMonthDTOs = hoursInMonthService.selectAllHoursInYear(year);
+                return new ResponseEntity<>(hoursInMonthDTOs, HttpStatusCode.valueOf(200));
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+            }
+        });
+    }
 
-			return "redirect:/dlut/tabele/skatit/darba-stundas";
-		} else {
-			return "input-work-hours";
-		
-	}
-	}
+    @DeleteMapping("/delete")
+    public ResponseEntity<Object> deleteHoursInMonth(@RequestHeader HttpHeaders headers, @RequestBody @Valid HoursInMonthDTO hoursInMonthDTO) {
+        return TokenValidationUtil.handleRequest(userManage, headers, () -> {
+            try {
+                int year = hoursInMonthDTO.getYear();
+                hoursInMonthService.deleteHoursInMonthDTO(hoursInMonthDTO);
+                return new ResponseEntity<>(hoursInMonthService.selectAllHoursInYear(year), HttpStatusCode.valueOf(200));
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+            }
+        });
+    }
 
+    @GetMapping("/showHoursInMonth/{year}/{month}")
+    public ResponseEntity<Object> getShowHoursInMonth(@RequestHeader HttpHeaders headers, @PathVariable int year, @PathVariable int month) {
+        return TokenValidationUtil.handleRequest(userManage, headers, () -> {
+            try {
+                HoursInMonthDTO hoursInMonthDTO = hoursInMonthService.selectHoursInMonthByYearAndMonthDTO(year, month);
+                return new ResponseEntity<>(hoursInMonthDTO, HttpStatusCode.valueOf(200));
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+            }
+        });
+    }
 
-	@GetMapping("/dlut/tabele/skatit/darba-stundas") // localhost:8080/article/category/showAll
-	public String getShowAllHoursInMonth(Model model) {
+    @PutMapping("/updateHoursInMonth")
+    public ResponseEntity<Object> updateHoursInMonth(@RequestHeader HttpHeaders headers, @RequestBody @Valid HoursInMonthDTO hoursInMonthDTO) {
+        return TokenValidationUtil.handleRequest(userManage, headers, () -> {
+            try {
+                hoursInMonthService.updateHoursInMonthDTO(hoursInMonthDTO);
+                return new ResponseEntity<>(hoursInMonthDTO, HttpStatusCode.valueOf(200));
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+            }
+        });
+    }
 
+    @PostMapping("/insertHoursInYear")
+    public ResponseEntity<Object> insertHoursInYear(@RequestHeader HttpHeaders headers, @RequestBody @Valid List<HoursInMonthDTO> hoursInYearDTO) {
+        return TokenValidationUtil.handleRequest(userManage, headers, () -> {
+            try {
+                List<HoursInMonthDTO> insertedHours = hoursInMonthService.insertHoursInYear(new ArrayList<>(hoursInYearDTO));
+                return new ResponseEntity<>(insertedHours, HttpStatusCode.valueOf(200));
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+            }
+        });
+    }
 
-		ArrayList<HoursInMonth> h = hoursInMonthService.selectAllHoursInMonths();
-		h.sort(Comparator.comparing(HoursInMonth::getYear).thenComparing(HoursInMonth::getMonth));
-		model.addAttribute("workHours", h);
-
-		return "show-all-hours-in-month";
-
-	}
-	
 }

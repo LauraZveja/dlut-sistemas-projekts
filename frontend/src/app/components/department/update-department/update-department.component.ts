@@ -42,7 +42,7 @@ export class UpdateDepartmentComponent implements OnInit{
         },
         error: (error) => {
           console.error('Dati netika atjaunoti:', error.message);
-          alert('Dati netika atjaunoti, lūdzu, mēģiniet vēlreiz.');
+          alert(error.message);
         }
       });
     } else {

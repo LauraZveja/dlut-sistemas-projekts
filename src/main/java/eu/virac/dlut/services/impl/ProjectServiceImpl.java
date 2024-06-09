@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import eu.virac.dlut.models.Project;
-import eu.virac.dlut.repos.IEmployeeTimeSheetRepo;
-import eu.virac.dlut.repos.IFinanceOrderWorkRepo;
 import eu.virac.dlut.repos.IProjectCharacterRepo;
 import eu.virac.dlut.repos.IProjectRepo;
 import eu.virac.dlut.services.IProjectService;
@@ -39,14 +37,6 @@ public class ProjectServiceImpl implements IProjectService{
 		}
 		return res;
 	}
-	
-//	@Override
-//	public ArrayList<Project> selectAllProjectsForEmployeeInYearMonth(String year, String month,
-//			int employeeId) {
-//		ArrayList<Project> allProjectsForDate = projectRepo.getProjectsForEmployeeForSpecificDate(year, month, employeeId);
-//		return allProjectsForOneEmployee;
-//	}
-
 
 	@Override
 	public ArrayList<Project> selectAllActiveProjects() {

@@ -12,9 +12,6 @@ body, html {
     font-family: 'Arial', sans-serif;
 }
 
-
-
-/* Footer and Header Styles */
 header {
     width: 100%;
     text-align: center;
@@ -32,7 +29,6 @@ footer {
     margin-top: 1rem;
 }
 
-/* Main Content Styles */
 .main-content {
     flex: 1; 
     padding: 1rem;

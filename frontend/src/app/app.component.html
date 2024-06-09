@@ -14,7 +14,7 @@
           <a class="nav-link" routerLink="/" aria-current="page">Sākums</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/ievadit-darba-stundas">Ievadīt darba stundas mēnesim</a>
+          <a class="nav-link" routerLink="/hours-in-this-year">Ievadīt darba stundas mēnesim</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/eksportet-finansejuma-avots">Tabeļu eksportēšana finansējuma avotam</a>
@@ -29,23 +29,16 @@
           <a class="nav-link" routerLink="/admin-panel">Administratīvais panelis</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" tabindex="-1" aria-disabled="true">Izrakstīties</a>
-        </li>
+          <a class="nav-link" href="#" (click)="logout()">Izrakstīties</a>
+        </li>        
       </ul>
     </div>
   </div>
 </nav>
 
-
-
-
-<!-- Main content area for routed components -->
 <div class="main-content">
   <router-outlet></router-outlet>
 </div>
-
-<!-- Footer placeholder -->
 <footer>
-  <!-- Footer content here -->
   IZI VSRC | 2024
 </footer>

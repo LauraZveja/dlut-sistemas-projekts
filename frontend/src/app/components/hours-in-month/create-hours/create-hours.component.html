@@ -1,0 +1,32 @@
+<div class="container mt-3">
+    <h2>Pievienot Darba Stundas</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="mb-3 row">
+        <label for="year" class="col-sm-2 col-form-label">Gads:</label>
+        <div class="col-sm-10">
+            <input type="number" id="year" class="form-control" [(ngModel)]="hours.year" name="year" required>
+          </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="month" class="col-sm-2 col-form-label">Mēnesis:</label>
+        <div class="col-sm-10">
+          <select id="month" class="form-control" [(ngModel)]="hours.month" name="month" required>
+            <option *ngFor="let month of monthNames; let i = index" [value]="i" [disabled]="i === 0">{{ month }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="hoursInMonth" class="col-sm-2 col-form-label">Darba Stundas:</label>
+        <div class="col-sm-10">
+          <input type="number" id="hoursInMonth" class="form-control" [(ngModel)]="hours.hoursInMonth" name="hoursInMonth" required>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <div class="col-sm-10 offset-sm-2">
+            <button type="submit" class="btn btn-outline-primary me-2">Pievienot</button>
+            <button type="button" class="btn btn-outline-dark" (click)="goBack()">Atpakaļ</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  

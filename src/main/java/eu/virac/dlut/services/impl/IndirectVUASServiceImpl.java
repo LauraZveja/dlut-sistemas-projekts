@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import eu.virac.dlut.models.AcademicWorkLoad;
 import eu.virac.dlut.models.IndirectVUAS;
 import eu.virac.dlut.repos.IIndirectVUASRepo;
 import eu.virac.dlut.services.IIndirectVUASService;

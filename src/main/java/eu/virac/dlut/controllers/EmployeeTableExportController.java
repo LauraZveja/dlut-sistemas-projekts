@@ -1,6 +1,5 @@
 package eu.virac.dlut.controllers;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,15 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import eu.virac.dlut.models.Employee;
-import eu.virac.dlut.models.EmployeeTimeSheet;
-import eu.virac.dlut.models.FinanceOrderWork;
-import eu.virac.dlut.models.FinanceSource;
-import eu.virac.dlut.models.FullTimeEquivalent;
 import eu.virac.dlut.models.HoursInMonth;
 import eu.virac.dlut.repos.IEmployeeRepo;
 import eu.virac.dlut.repos.IFinanceOrderWorkRepo;
@@ -82,7 +77,7 @@ public class EmployeeTableExportController {
     }
 
     @GetMapping("dlut/tabele/eksportet/darbinieks/{year}/{month}/{idempl}")
-    public ResponseEntity<?> getFinanceSourceTableExportResults(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("idempl") int employeeId) {
+    public ResponseEntity<Object> getFinanceSourceTableExportResults(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("idempl") int employeeId) {
 
         Map<Integer, String> monthNumberAndName = new HashedMap<>();
         // mēneša attēlojumam virsrakstā
@@ -146,7 +141,7 @@ public class EmployeeTableExportController {
 
     //rediģēšanai
     @GetMapping("dlut/tabele/rediget/darbinieks/{year}/{month}/{idempl}")
-    public ResponseEntity<?> getEmployeeTableExportResultsForEditing(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("idempl") int employeeId) {
+    public ResponseEntity<Object> getEmployeeTableExportResultsForEditing(@PathVariable("year") int year, @PathVariable("month") int month, @PathVariable("idempl") int employeeId) {
 
         List<EmployeeAndHourDTO> results = new ArrayList<>();
         // mēneša attēlojumam virsrakstā

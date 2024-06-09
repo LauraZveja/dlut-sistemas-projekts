@@ -1,0 +1,30 @@
+<div class="container mt-3">
+    <h2>Atjaunot darba stundas:</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="mb-2 row">
+        <label for="year" class="col-sm-2 col-form-label text-success">Gads:</label>
+        <div class="col-sm-10">
+          <p class="form-control-plaintext text-success mb-0">{{ hours.year }}</p>
+        </div>
+      </div>
+      <div class="mb-2 row">
+        <label for="month" class="col-sm-2 col-form-label text-success">Mēnesis:</label>
+        <div class="col-sm-10">
+          <p class="form-control-plaintext text-success mb-0">{{ getMonthName(hours.month) }}</p>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="hoursInMonth" class="col-sm-2 col-form-label">Darba Stundas:</label>
+        <div class="col-sm-1">
+          <input type="number" id="hoursInMonth" class="form-control" [(ngModel)]="hours.hoursInMonth" name="hoursInMonth" required>
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <div class="col-sm-10 offset-sm-2">
+            <button type="submit" class="btn btn-outline-primary me-2">Atjaunot</button>
+            <button type="button" class="btn btn-outline-dark" (click)="goBack()">Atpakaļ</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  

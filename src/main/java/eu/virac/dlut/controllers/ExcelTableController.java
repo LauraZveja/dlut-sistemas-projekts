@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import eu.virac.dlut.services.IExcelCreatorService;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 @Controller
@@ -27,43 +26,26 @@ public class ExcelTableController {
     public ResponseEntity<InputStreamResource> createExcelFinanceSource(@PathVariable("year") int year, @PathVariable("month") int month,
                                                                         @PathVariable("id") int finSourceId) {
 
-        try {
-
-            Workbook workbook = excelCreatorService.createFinSourceTableExcel(finSourceId, year, month);
-
-            // Convert the workbook to a byte array, lai var nosūtīt kā response
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try (Workbook workbook = excelCreatorService.createFinSourceTableExcel(finSourceId, year, month);
+             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
             workbook.write(byteArrayOutputStream);
-            byteArrayOutputStream.close();
-            workbook.close();
-
             ByteArrayResource resource = new ByteArrayResource(byteArrayOutputStream.toByteArray());
-
-            // Uzstāda headers, lai browser zinātu, ka failu vajag lejupielādēt
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"finSource-" + month + "-" + year + ".xlsx\"");
-
             return ResponseEntity.ok()
-                    .headers(headers)
                     .contentLength(resource.contentLength())
-                    .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                    .body(new InputStreamResource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray())));
+                    .body(new InputStreamResource(resource.getInputStream()));
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(500).build();
         }
     }
 
     @GetMapping("/dlut/tabele/eksportet/darbinieks/excel/{year}/{month}/{id}")
-    public ResponseEntity<?> createExcelEmployee(@PathVariable("year") int year, @PathVariable("month") int month,
+    public ResponseEntity<Object> createExcelEmployee(@PathVariable("year") int year, @PathVariable("month") int month,
                                                  @PathVariable("id") int employeeId) {
 
-        try {
-            Workbook workbook = excelCreatorService.createEmployeeExcel(employeeId, year, month);
+        try (Workbook workbook = excelCreatorService.createEmployeeExcel(employeeId, year, month);
+             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             workbook.write(byteArrayOutputStream);
-            byteArrayOutputStream.close(); // Ensure the stream is closed after use
             ByteArrayResource resource = new ByteArrayResource(byteArrayOutputStream.toByteArray());
 
             HttpHeaders headers = new HttpHeaders();
@@ -73,10 +55,9 @@ public class ExcelTableController {
             return ResponseEntity.ok()
                     .headers(headers)
                     .contentLength(resource.contentLength())
-                    .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-                    .body(new InputStreamResource(new ByteArrayInputStream(byteArrayOutputStream.toByteArray())));
+                    .body(new InputStreamResource(resource.getInputStream()));
         } catch (Exception e) {
-            return new ResponseEntity<>("Error generating Excel file: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(500).body("Error creating Excel file");
         }
     }
 }

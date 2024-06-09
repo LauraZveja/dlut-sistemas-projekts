@@ -3,7 +3,6 @@ package eu.virac.dlut.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import eu.virac.dlut.models.HolidayPreholidayTransferedHoliday;
 import eu.virac.dlut.models.OrderVacation;
 import eu.virac.dlut.repos.IOrderVacationRepo;
 import eu.virac.dlut.services.IOrderVacationService;

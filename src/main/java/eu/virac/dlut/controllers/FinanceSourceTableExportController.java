@@ -2,6 +2,8 @@ package eu.virac.dlut.controllers;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import jakarta.validation.Valid;
 
@@ -28,6 +30,7 @@ import eu.virac.dlut.services.ITableExportService;
 
 @Controller
 public class FinanceSourceTableExportController {
+	private static final Logger logger = Logger.getLogger(FinanceSourceTableExportController.class.getName());
 
 	@Autowired
 	ITableExportService tableExportService;
@@ -71,8 +74,7 @@ public class FinanceSourceTableExportController {
 				HoursInMonth h = hoursInMonthService.selectHoursInMonthByYearAndMonth(year, month);
 				workHoursThisMonth = h.getHoursInMonth();
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				logger.log(Level.WARNING, "Error: ", e1);
 			}
 		
 		
@@ -175,7 +177,6 @@ public class FinanceSourceTableExportController {
 				return "no-results";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			return "no-results";
 		}
 	

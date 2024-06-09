@@ -1,23 +1,14 @@
 package eu.virac.dlut.repos;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import eu.virac.dlut.models.EmployeeTimeSheet;
-import eu.virac.dlut.models.Project;
 import org.springframework.data.repository.query.Param;
 
 public interface IEmployeeTimeSheetRepo extends CrudRepository<EmployeeTimeSheet, Integer> {
-
-//	@Query(value = "SELECT ets.hours_worked FROM employee_time_sheet ets JOIN finance_order_work fow ON ets.id_fin_ord_work_employee=fow.id_fin_ord_work "
-//			+ "JOIN order_work ow ON fow.id_ord_work=ow.id_order "
-//			+ "JOIN employee emp ON ow.id_employee=emp.id_employee "
-//			+ "WHERE (EXTRACT(YEAR FROM ets.year_month_day) = ?1 AND EXTRACT(MONTH FROM ets.year_month_day) = ?2 ) AND emp.id_employee = ?3 ",
-//			nativeQuery = true)
-//	ArrayList<Float> getHoursWorkedForEmployee(String year, String month, int idEmployee);
 
     @Query(value = "CALL GetHoursWorkedForEmployeeInProject(:yearParam, :monthParam, :idEmployeeParam, :idProjectParam)", nativeQuery = true)
     ArrayList<Double> getHoursWorkedForEmployeeInProject(
@@ -31,13 +22,6 @@ public interface IEmployeeTimeSheetRepo extends CrudRepository<EmployeeTimeSheet
     ArrayList<String> getDistinctYearsFromTimeSheet();
 
     EmployeeTimeSheet findByFinOrdWorkIdFinOrdWork(int finOrdWorkId);
-
-//	@Query(value = "SELECT ets.hours_worked FROM employee_time_sheet ets JOIN finance_order_work fow ON ets.id_fin_ord_work_employee=fow.id_fin_ord_work "
-//			+ "JOIN order_work ow ON fow.id_ord_work=ow.id_order "
-//			+ "JOIN employee emp ON ow.id_employee=emp.id_employee "
-//			+ "WHERE (EXTRACT(YEAR FROM ets.year_month_day) = ?1 AND EXTRACT(MONTH FROM ets.year_month_day) = ?2 AND EXTRACT(DAY FROM ets.year_month_day) = ?3 ) AND emp.id_employee = ?4 AND fow.id_project = ?5 ",
-//			nativeQuery = true)
-//	Float getHoursWorkedOnSpecificDayForEmployee(String year, String month, String day, int employeeId, int projectId);
 
     @Query(value = "CALL GetHoursWorkedOnSpecificDayForEmployeeProject(:yearParam, :monthParam, :dayParam, :employeeIdParam, :projectIdParam);", nativeQuery = true)
     ArrayList<Double> getHoursWorkedOnSpecificDayForEmployeeProject(@Param("yearParam") String year,
