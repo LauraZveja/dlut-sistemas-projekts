@@ -16,14 +16,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/dlut/department")
 public class DepartmentController {
 
-    @Autowired
-    IDepartmentService departmentService;
+    private final IDepartmentService departmentService;
+    private final IUserManageService userManage;
 
     @Autowired
-    IUserManageService userManage;
+    public DepartmentController(IDepartmentService departmentService, IUserManageService userManage) {
+        this.departmentService = departmentService;
+        this.userManage = userManage;
+    }
 
     @PostMapping("/addNew")
-    public ResponseEntity<?> addNewDepartment(@RequestHeader HttpHeaders headers, @RequestBody @Valid DepartmentDTO departmentDTO) {
+    public ResponseEntity<Object> addNewDepartment(@RequestHeader HttpHeaders headers, @RequestBody @Valid DepartmentDTO departmentDTO) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 departmentService.insertDepartment(departmentDTO);
@@ -35,14 +38,14 @@ public class DepartmentController {
     }
 
     @GetMapping("/showAll")
-    public ResponseEntity<?> showAllDepartments(@RequestHeader HttpHeaders headers) {
+    public ResponseEntity<Object> showAllDepartments(@RequestHeader HttpHeaders headers) {
         return TokenValidationUtil.handleRequest(userManage, headers, () ->
                 new ResponseEntity<>(departmentService.retrieveAllDataForDepartments(), HttpStatusCode.valueOf(200))
         );
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateDepartment(@RequestHeader HttpHeaders headers, @RequestBody @Valid DepartmentDTO departmentDTO) {
+    public ResponseEntity<Object> updateDepartment(@RequestHeader HttpHeaders headers, @RequestBody @Valid DepartmentDTO departmentDTO) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 departmentService.updateDepartmentById(departmentDTO);
@@ -54,7 +57,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteDepartment(@RequestHeader HttpHeaders headers, @RequestBody @Valid DepartmentDTO departmentDTO) {
+    public ResponseEntity<Object> deleteDepartment(@RequestHeader HttpHeaders headers, @RequestBody @Valid DepartmentDTO departmentDTO) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
                 departmentService.deleteDepartmentById(departmentDTO);

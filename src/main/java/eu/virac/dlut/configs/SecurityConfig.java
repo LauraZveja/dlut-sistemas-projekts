@@ -21,6 +21,9 @@ import java.util.Collections;
 @EnableWebSecurity
 @CrossOrigin(origins = "http://localhost:4200")
 public class SecurityConfig {
+
+    private static final String LOGIN_PATH = "/login";
+
     @Value("${spring.ldap.urls}")
     private String ldapUrls;
 
@@ -38,7 +41,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login", "/api/auth/login","/dlut/employee/*", "/dlut/department/*", "dlut/table/**").permitAll()
+                        .requestMatchers(LOGIN_PATH, "/api/auth/login","/dlut/employee/*", "/dlut/department/*", "dlut/table/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
@@ -53,11 +56,11 @@ public class SecurityConfig {
                         })
                 )
                 .formLogin(form -> form
-                        .loginPage("/login").permitAll()
+                        .loginPage(LOGIN_PATH).permitAll()
                         .defaultSuccessUrl("/home", true)
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl(LOGIN_PATH)
                         .deleteCookies("JSESSIONID")
                 );
 

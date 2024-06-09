@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 public class TokenValidationUtil {
 
-    public static ResponseEntity<?> handleRequest(IUserManageService userManage, HttpHeaders headers, RequestHandler handler) {
+    public static ResponseEntity<Object> handleRequest(IUserManageService userManage, HttpHeaders headers, RequestHandler handler) {
         if (userManage.isUserTokenOk(headers.getFirst("token"))) {
             return handler.handle();
         } else {
@@ -17,6 +17,6 @@ public class TokenValidationUtil {
 
     @FunctionalInterface
     public interface RequestHandler {
-        ResponseEntity<?> handle();
+        ResponseEntity<Object> handle();
     }
 }
