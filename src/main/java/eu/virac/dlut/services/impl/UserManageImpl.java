@@ -16,11 +16,17 @@ import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class UserManageImpl implements IUserManageService {
-    @Autowired
-    private IUserTokenRepo tokenRepo;
+
+    private final IUserTokenRepo tokenRepo;
     private static final long EXPIRATION_TIME = 864_000_000;
+
     @Value("${secret.key}")
     private String secretKey;
+
+    @Autowired
+    public UserManageImpl(IUserTokenRepo tokenRepo) {
+        this.tokenRepo = tokenRepo;
+    }
 
     @Override
     public String saveUserToken(String userDn) {
@@ -44,13 +50,9 @@ public class UserManageImpl implements IUserManageService {
     public boolean isUserTokenOk(String token) {
         UserToken tokenFromDB = tokenRepo.findByToken(token);
 
-        if (tokenFromDB == null) return false;
-        String compareToken = getToken(tokenFromDB.getDn());
-
-        if (!compareToken.equals(token) || tokenFromDB.getExpired().before(new Date(System.currentTimeMillis())))
-            return false;
-
-        else return true;
+        return tokenFromDB != null &&
+                getToken(tokenFromDB.getDn()).equals(token) &&
+                tokenFromDB.getExpired().after(new Date(System.currentTimeMillis()));
     }
 
     @Override

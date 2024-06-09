@@ -1,6 +1,7 @@
 package eu.virac.dlut.controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.virac.dlut.models.helpers.HoursInMonthDTO;
 import eu.virac.dlut.services.IUserManageService;
@@ -18,11 +19,14 @@ import eu.virac.dlut.services.IHoursInMonthService;
 @RequestMapping("/dlut/table")
 public class HoursInMonthAndSpecialDaysInputController {
 
-    @Autowired
-    IHoursInMonthService hoursInMonthService;
+	private final IHoursInMonthService hoursInMonthService;
+	private final IUserManageService userManage;
 
-    @Autowired
-    IUserManageService userManage;
+	@Autowired
+	public HoursInMonthAndSpecialDaysInputController(IHoursInMonthService hoursInMonthService, IUserManageService userManage) {
+		this.hoursInMonthService = hoursInMonthService;
+		this.userManage = userManage;
+	}
 
     @PostMapping("/insertHoursInMonth")
     public ResponseEntity<Object> insertHoursInMonth(@RequestHeader HttpHeaders headers, @RequestBody @Valid HoursInMonthDTO hoursInMonthDTO) {
@@ -89,7 +93,7 @@ public class HoursInMonthAndSpecialDaysInputController {
     public ResponseEntity<Object> insertHoursInYear(@RequestHeader HttpHeaders headers, @RequestBody @Valid ArrayList<HoursInMonthDTO> hoursInYearDTO) {
         return TokenValidationUtil.handleRequest(userManage, headers, () -> {
             try {
-                ArrayList<HoursInMonthDTO> insertedHours = hoursInMonthService.insertHoursInYear(new ArrayList<>(hoursInYearDTO));
+                List<HoursInMonthDTO> insertedHours = hoursInMonthService.insertHoursInYear(new ArrayList<>(hoursInYearDTO));
                 return new ResponseEntity<>(insertedHours, HttpStatusCode.valueOf(200));
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));

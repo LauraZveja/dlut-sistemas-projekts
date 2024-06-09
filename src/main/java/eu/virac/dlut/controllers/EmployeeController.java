@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/dlut/employee")
 public class EmployeeController {
 
+    private final IEmployeeService employeeService;
+    private final IUserManageService userManage;
+
     @Autowired
-    IEmployeeService employeeService;
-    @Autowired
-    private IUserManageService userManage;
+    public EmployeeController(IEmployeeService employeeService, IUserManageService userManage) {
+        this.employeeService = employeeService;
+        this.userManage = userManage;
+    }
 
     @PostMapping("/addNew")
     public ResponseEntity<Object> addNewEmployee(@RequestHeader HttpHeaders headers, @RequestBody @Valid EmployeeDTO employeeDTO) {
